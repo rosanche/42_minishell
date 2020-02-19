@@ -45,6 +45,7 @@ SRCS = arraylist_add.c \
 		minishell_exit.c \
 		minishell_initialize.c \
 		minishell_pre_loop.c \
+		exec.c \
 
 OBJ = $(SRCS:%.c=%.o)
 
