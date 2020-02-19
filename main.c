@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 int
-	main(int argc, char **argv)
+	main3(int argc, char **argv)
 {
 	t_arrlst *alst;
 
@@ -35,7 +35,7 @@ int
 }
 
 int
-	main3(int argc, char **argv, char **envp)
+	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
 

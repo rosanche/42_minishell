@@ -60,6 +60,7 @@ void			builtin_errno(t_minishell *shell, char *exec, char *arg);
 void			builtin_handler_echo(t_minishell *shell, int argc, char **argv);
 void			builtin_handler_cd(t_minishell *shell, int argc, char **argv);
 void			builtin_handler_pwd(t_minishell *shell, int argc, char **argv);
+void			builtin_handler_env(t_minishell *shell, int argc, char **argv);
 void			builtin_handler_exit(t_minishell *shell, int argc, char **argv);
 
 typedef struct	s_env_var

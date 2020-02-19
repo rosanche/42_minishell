@@ -24,7 +24,6 @@ int
 	new_cap = alst->size + n;
 	if (new_cap <= alst->capacity)
 		return (1);
-	ft_printf("grow\n");
 	new_cap = alst->size + (n * alst->grow_factor);
 	old_items = alst->items;
 	if (!(alst->items = (void **)malloc(new_cap * sizeof(void *))))
