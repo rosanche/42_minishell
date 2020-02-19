@@ -3,3 +3,6 @@
 .settings/
 .cproject
 a.out
+*.o
+*.a
+.pydevproject
