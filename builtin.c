@@ -15,30 +15,30 @@
 t_builtin	g_builtin[] = {
 	{
 		.handler = &builtin_handler_echo,
-		.name = "echo"
+		.name = BIN_ECHO
 	},
 	{
 		.handler = builtin_handler_cd,
-		.name = "cd"
+		.name = BIN_CD
 	},
 	{
 		.handler = &builtin_handler_pwd,
-		.name = "pwd"
+		.name = BIN_PWD
+	},
+	{
+		.handler = &builtin_handler_export,
+		.name = BIN_EXPORT
 	},
 	{
 		.handler = NULL,
-		.name = "export"
-	},
-	{
-		.handler = NULL,
-		.name = "unset"
+		.name = BIN_UNSET
 	},
 	{
 		.handler = &builtin_handler_env,
-		.name = "env"
+		.name = BIN_ENV
 	},
 	{
 		.handler = &builtin_handler_exit,
-		.name = "exit"
+		.name = BIN_EXIT
 	},
 };

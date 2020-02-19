@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_handler_exit.c                             :+:      :+:    :+:   */
+/*   builtin_handler_export.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,26 +13,8 @@
 #include "minishell.h"
 
 void
-	builtin_handler_exit(t_minishell *shell, t_builtin_param param)
+	builtin_handler_export(t_minishell *shell, t_builtin_param param)
 {
-	char	code;
-
 	if (param.argc == 1)
-		code = 0;
-	else
-	{
-		if (ft_str_isdigit(param.argv[1], 1, 1))
-		{
-			code = (char)ft_atoi(param.argv[1]);
-			if (param.argc > 2)
-				builtin_error(shell, param, NULL, ERR_TOO_MANY_ARGS);
-			else
-				minishell_exit(shell, code);
-		}
-		else
-		{
-			builtin_error(shell, param, param.argv[1], ERR_NUM_ARG_REQ);
-			minishell_exit(shell, (char)255);
-		}
-	}
+		builtin_handler_env(shell, param);
 }

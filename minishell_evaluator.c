@@ -1,32 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_error.c                                    :+:      :+:    :+:   */
+/*   minishell_evaluator.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 16:32:51 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 16:32:51 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/19 12:16:56 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/19 12:16:56 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void
-	builtin_error(t_minishell *shell, t_builtin_param param, char *arg, char *error)
+	minishell_evaluate(t_minishell *shell, char *line)
 {
-	if (error == NULL)
-		error = "error";
+	char		**split;
+	t_builtin	*builtin;
 
-	if (arg == NULL)
-		ft_dprintf(param.fd_err, "%s: %s: %s\n", shell->name, param.name, error);
+	split = ft_split(line, ' ');
+	builtin = builtin_match(split[0]);
+	if (builtin)
+		(*(builtin->handler))(shell, (t_builtin_param) {
+			split[0], ft_split_length(split), split, OUT, ERR
+		});
 	else
-		ft_dprintf(param.fd_err, "%s: %s: %s: %s\n", shell->name, param.name, arg, error);
-}
-
-void
-	builtin_errno(t_minishell *shell, t_builtin_param param, char *arg)
-{
-	builtin_error(shell, param, arg, strerror(errno));
-	errno = 0;
+		minishell_error(shell, split[0], ERR_CMD_NOT_FOUND);
+	ft_split_free(&split);
 }

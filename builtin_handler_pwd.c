@@ -13,11 +13,11 @@
 #include "minishell.h"
 
 void
-	builtin_handler_pwd(t_minishell *shell, int argc, char **argv)
+	builtin_handler_pwd(t_minishell *shell, t_builtin_param param)
 {
 	char	*path;
 
 	path = getcwd(NULL, 0);
-	ft_putendl_fd(path, OUT);
+	ft_putendl_fd(path, param.fd_out);
 	free(path);
 }

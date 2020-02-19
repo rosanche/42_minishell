@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	builtin_handler_env(t_minishell *shell, int argc, char **argv)
+	builtin_handler_env(t_minishell *shell, t_builtin_param param)
 {
 	size_t		index;
 	t_env_var	*item;
@@ -22,7 +22,7 @@ void
 	while (index < g_env_variables.size)
 	{
 		item = (t_env_var *)g_env_variables.items[index];
-		ft_printf("%s=%s\n", item->name, item->value);
+		ft_dprintf(param.fd_out, "%s=%s\n", item->name, item->value);
 		index++;
 	}
 }

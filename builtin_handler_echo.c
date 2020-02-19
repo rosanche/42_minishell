@@ -13,20 +13,20 @@
 #include "minishell.h"
 
 void
-	builtin_handler_echo(t_minishell *shell, int argc, char **argv)
+	builtin_handler_echo(t_minishell *shell, t_builtin_param param)
 {
 	int	n_opt;
 	int	index;
 
-	n_opt = argc >= 2 && ft_strcmp("-n", argv[1]) == 0;
+	n_opt = param.argc >= 2 && ft_strcmp("-n", param.argv[1]) == 0;
 	index = 1 + n_opt;
-	while (index < argc)
+	while (index < param.argc)
 	{
-		ft_putstr_fd(argv[index], OUT);
+		ft_putstr_fd(param.argv[index], param.fd_out);
 		index++;
-		if (index < argc)
-			ft_putchar_fd(' ', OUT);
+		if (index < param.argc)
+			ft_putchar_fd(' ', param.fd_out);
 	}
 	if (!n_opt)
-		ft_putchar_fd('\n', OUT);
+		ft_putchar_fd('\n', param.fd_out);
 }

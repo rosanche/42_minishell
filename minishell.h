@@ -29,12 +29,33 @@
 
 # define DISPLAY_LOADED_VARS 1
 
+# define BIN_ECHO "echo"
+# define BIN_CD "cd"
+# define BIN_PWD "pwd"
+# define BIN_EXPORT "export"
+# define BIN_UNSET "unset"
+# define BIN_ENV "env"
+# define BIN_EXIT "exit"
+
+# define ERR_CMD_NOT_FOUND "command not found"
+# define ERR_TOO_MANY_ARGS "too many arguments"
+# define ERR_NUM_ARG_REQ "numeric argument required"
+
 typedef struct	s_minishell
 {
 	char	*name;
 }				t_minishell;
 
-typedef void	(*t_builtin_handler)(t_minishell *, int, char **);
+typedef struct	s_builtin_param
+{
+	char	*name;
+	int		argc;
+	char	**argv;
+	int		fd_out;
+	int		fd_err;
+}				t_builtin_param;
+
+typedef void	(*t_builtin_handler)(t_minishell *, t_builtin_param);
 
 typedef struct	s_builtin
 {
@@ -47,21 +68,23 @@ t_builtin		g_builtin[BUILTIN_COUNT];
 void			minishell_initialize(t_minishell *shell, char *name);
 void			minishell_pre_loop(t_minishell *shell);
 void			minishell_input_loop(t_minishell *shell);
-void			minishell_handle(t_minishell *shell, char *line);
+
+void			minishell_evaluate(t_minishell *shell, char *line);
 
 void			minishell_error(t_minishell *shell, char *exec, char *error);
 void			minishell_exit(t_minishell *shell, char code);
 
 t_builtin		*builtin_match(char *name);
 
-void			builtin_error(t_minishell *shell, char *exec, char *arg, char *error);
-void			builtin_errno(t_minishell *shell, char *exec, char *arg);
+void			builtin_error(t_minishell *shell, t_builtin_param param, char *arg, char *error);
+void			builtin_errno(t_minishell *shell, t_builtin_param param, char *arg);
 
-void			builtin_handler_echo(t_minishell *shell, int argc, char **argv);
-void			builtin_handler_cd(t_minishell *shell, int argc, char **argv);
-void			builtin_handler_pwd(t_minishell *shell, int argc, char **argv);
-void			builtin_handler_env(t_minishell *shell, int argc, char **argv);
-void			builtin_handler_exit(t_minishell *shell, int argc, char **argv);
+void			builtin_handler_echo(t_minishell *shell, t_builtin_param param);
+void			builtin_handler_cd(t_minishell *shell, t_builtin_param param);
+void			builtin_handler_pwd(t_minishell *shell, t_builtin_param param);
+void			builtin_handler_export(t_minishell *shell, t_builtin_param param);
+void			builtin_handler_env(t_minishell *shell, t_builtin_param param);
+void			builtin_handler_exit(t_minishell *shell, t_builtin_param param);
 
 typedef struct	s_env_var
 {

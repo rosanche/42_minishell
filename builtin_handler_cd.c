@@ -13,14 +13,14 @@
 #include "minishell.h"
 
 void
-	builtin_handler_cd(t_minishell *shell, int argc, char **argv)
+	builtin_handler_cd(t_minishell *shell, t_builtin_param param)
 {
 	char	*path;
 
-	if (argc == 1)
+	if (param.argc == 1)
 		path = "~";
 	else
-		path = argv[1];
+		path = param.argv[1];
 	if (chdir(path) == -1)
-		builtin_errno(shell, "cd", path);
+		builtin_errno(shell, param, path);
 }
