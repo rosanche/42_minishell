@@ -1,19 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isdigit.c                                       :+:      :+:    :+:   */
+/*   ft_base_validate.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/04 12:04:47 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/04 12:04:47 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/19 15:48:26 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/19 15:48:26 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 int
-	ft_isdigit(int c)
+	ft_base_resolve(const char *base, char match)
 {
-	return (c >= '0' && c <= '9');
+	int	index;
+
+	index = 0;
+	while (base[index])
+	{
+		if (base[index] == match)
+			return (index);
+		index++;
+	}
+	return (-1);
 }

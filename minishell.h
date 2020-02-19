@@ -119,4 +119,21 @@ void			env_dump_content(void);
 
 int				env_compare_by_name(t_env_var *item, char *to);
 
+typedef struct	s_quote_ctx
+{
+	char	type;
+	int		in;
+}				t_quote_ctx;
+
+typedef struct	s_cmd_group
+{
+	size_t	pos;
+	char	*line;
+}				t_cmd_group;
+
+
+int				evaluate_quote(char *line, char of, size_t *consumed);
+size_t			evaluate_quote_size(char *line, size_t *consumed);
+int				evaluator_escape_backslash(char *seq, size_t *consumed);
+
 #endif

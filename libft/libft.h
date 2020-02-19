@@ -91,6 +91,8 @@ int					ft_isprint(int c);
 int					ft_iswspace(int c);
 int					ft_islower(int c);
 int					ft_isupper(int c);
+int					ft_ishex(int c);
+int					ft_isoctal(int c);
 int					ft_isinstr(char c, char *charset);
 
 char				*ft_substr(char const *s, unsigned int start, size_t len);
@@ -139,5 +141,11 @@ void				ft_swap_int(int *a, int *b);
 void				ft_sort_comp(int *order, double *dist, int amount);
 
 void				ft_free_and_release(void **ptr_ptr);
+
+int					ft_atoi_base(const char *str, const char *base);
+int					ft_atoi_base_insensitive(const char *str, const char *base);
+
+int					ft_is_base_valid(const char *str);
+int					ft_base_resolve(const char *base, char match);
 
 #endif

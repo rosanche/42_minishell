@@ -35,6 +35,38 @@ int
 }
 
 int
+	main4(int argc, char **argv)
+{
+	t_minishell	shell;
+
+	ft_printf("SHELLING %s\n", shell.name);
+
+	ft_printf("--- %d\n", ft_is_base_valid(BASE_HEX_LOW));
+
+	size_t a = 0;
+	a = 0;
+	printf("at start %lu\n", a);
+
+	ft_printf("\n\n\n\n");
+
+	char *str;
+//	char *str = "Hello World 'from quotes' end, and now with_escaped '\\'' \"\\x65\\\" \"\\x65\" how is it ? alone= \\' so? --<";
+	str = "\' \\\' \\\" \\x66 x\'";
+	ft_printf(">");
+	while (evaluate_quote(str, 0, &a))
+	{
+		ft_printf(":%d\n", ((int)(0 + a)));
+		str += a;
+		while (ft_iswspace(*str))
+			str++;
+		a = 0;
+		ft_printf("\n>");
+	}
+	ft_printf("\n\n\n\n");
+	return (EXIT_SUCCESS);
+}
+
+int
 	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;
