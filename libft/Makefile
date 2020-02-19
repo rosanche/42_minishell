@@ -62,6 +62,7 @@ SRCS	=	./ft_abs.c \
 			./ft_split_length.c \
 			./ft_strchr.c \
 			./ft_strcontain.c \
+			./ft_strcmp.c \
 			./ft_strdup.c \
 			./ft_strjoin.c \
 			./ft_strlcat.c \
@@ -78,7 +79,11 @@ SRCS	=	./ft_abs.c \
 			./ft_tolower.c \
 			./ft_toupper.c \
 			./ft_zero_if_neg.c \
-			./get_next_line.c
+			./get_next_line.c \
+			./ft_str_isdigit.c \
+			./ft_strjoin_free.c \
+			./ft_strjoin_sided.c \
+
 OBJS	= $(SRCS:.c=.o)
 RM		= rm -f
 LIBC	= ar -rcs
