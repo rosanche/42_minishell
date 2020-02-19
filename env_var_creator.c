@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_finalize.c                                     :+:      :+:    :+:   */
+/*   env_var_create.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,16 +12,29 @@
 
 #include "minishell.h"
 
-void
-	env_finalize(void)
+t_env_var
+	*env_var_create_from_line(char *line)
 {
-	size_t	index;
+	char	*equal;
 
-	index = 0;
-	while (index < g_env_variables.size)
-	{
-		env_var_free_and_release(g_env_variables.items[index]);
-		index++;
-	}
-	arraylist_destroy_items(&g_env_variables);
+	equal = ft_strchr(line, '=');
+	if (equal == NULL)
+		return (NULL);
+	equal[0] = '\0';
+	equal++;
+	return (env_var_create(line, equal));
+}
+
+t_env_var
+	*env_var_create(char *name, char *value)
+{
+	t_env_var	*var;
+
+	if (!(var = (t_env_var *)malloc(sizeof(t_env_var))))
+		return (NULL);
+	var->name = ft_strdup(name);
+	var->value = ft_strdup(value);
+	if (var->name == NULL || var->value == NULL)
+		env_var_free_and_release(&var);
+	return (var);
 }

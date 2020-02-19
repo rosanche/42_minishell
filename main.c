@@ -19,17 +19,17 @@ int
 
 	alst = arraylist_create(2, NULL);
 	for (size_t i = 0; i < 15; i++)
-	{
 		arraylist_add(alst, (void *)i);
-		// ft_printf("added %d\n", (int)i);
-	}
 	arraylist_add(alst, (void *)1);
 	arraylist_add(alst, (void *)2);
 	arraylist_add(alst, (void *)3);
 	for (size_t i = 0; i < alst->size; i++)
-	{
 		ft_printf("[%5d] = %d\n", (int)i, (int)(alst->items[i]));
-	}
+	ft_printf("--------\n");
+	for (size_t i = 6; i < 9; i++)
+		arraylist_remove_at(alst, 6, NULL);
+	for (size_t i = 0; i < alst->size; i++)
+		ft_printf("[%5d] = %d\n", (int)i, (int)(alst->items[i]));
 	arraylist_destroy(alst);
 	return (EXIT_SUCCESS);
 }

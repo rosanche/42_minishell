@@ -15,26 +15,19 @@
 void
 	env_set_from_line(char *line)
 {
-	char	*equal;
+	t_env_var	*var;
 
-	equal = ft_strchr(line, '=');
-	if (equal == NULL)
+	var = env_var_create_from_line(line);
+	if (var == NULL)
 		return ;
-	equal[0] = '\0';
-	equal++;
-	env_set(line, equal);
+	env_set(var);
 }
 
 void
-	env_set(char *name, char *value)
+	env_set(t_env_var *var)
 {
-	t_env_var	*var;
-
-	if (!(var = (t_env_var *)malloc(sizeof(t_env_var))))
+	if (var == NULL)
 		return ;
-	var->name = ft_strdup(name);
-	var->value = ft_strdup(value);
-	if (var->name == NULL || var->value == NULL
-			|| !arraylist_add(&g_env_variables, var))
-		env_free_var(var);
+	arraylist_remove(&g_env_variables, var->name, &env_var_free);
+	arraylist_add(&g_env_variables, var);
 }

@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_initializer.c                                  :+:      :+:    :+:   */
+/*   arraylist_remove_at.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 17:55:58 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 17:55:58 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/19 13:33:19 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/19 13:33:19 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "arraylist.h"
 
-t_arrlst	g_env_variables;
-
-void
-	env_initialize(char **envp)
+int
+	arraylist_remove_at(t_arrlst *alst, size_t pos, void (*free_fct)())
 {
-	arraylist_init(&g_env_variables, &env_compare_by_name, 10);
-	if (envp != NULL)
-		env_load(envp);
+	if (alst == NULL || alst->size == 0 || pos >= alst->size)
+		return (0);
+	if (free_fct != NULL)
+		(*free_fct)(alst->items[pos]);
+	ft_memmove(alst->items + pos, alst->items + pos + 1,
+				(alst->size - pos) * sizeof(void *));
+	alst->size -= 1;
+	return (1);
 }

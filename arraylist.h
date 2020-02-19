@@ -21,7 +21,7 @@ typedef struct		s_arrlst
 	void			**items;
 	size_t			size;
 	size_t			capacity;
-	void			*cmp_method;
+	int				(*cmp_method)(void *, void *);
 	size_t			grow_factor;
 }					t_arrlst;
 
@@ -39,5 +39,10 @@ int					arraylist_add_all(t_arrlst *alst, t_arrlst *other);
 size_t				arraylist_size(t_arrlst *alst);
 
 int					arraylist_grow(t_arrlst *alst, size_t n);
+
+ssize_t				arraylist_index_of(t_arrlst *alst, void *ptr);
+
+int					arraylist_remove(t_arrlst *alst, void *ptr, void (*free_fct)());
+int					arraylist_remove_at(t_arrlst *alst, size_t pos, void (*free_fct)());
 
 #endif

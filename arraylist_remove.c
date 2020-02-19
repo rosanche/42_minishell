@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_initializer.c                                  :+:      :+:    :+:   */
+/*   arraylist_remove_at.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 17:55:58 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 17:55:58 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/19 13:33:19 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/19 13:33:19 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "arraylist.h"
 
-t_arrlst	g_env_variables;
-
-void
-	env_initialize(char **envp)
+int
+	arraylist_remove(t_arrlst *alst, void *ptr, void (*free_fct)())
 {
-	arraylist_init(&g_env_variables, &env_compare_by_name, 10);
-	if (envp != NULL)
-		env_load(envp);
+	ssize_t	index;
+	size_t	pos;
+
+	if ((index = arraylist_index_of(alst, ptr)) < 0)
+		return (0);
+	pos = 0 + index;
+	return (arraylist_remove_at(alst, pos, free_fct));
 }

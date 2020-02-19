@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_free_var.c                                     :+:      :+:    :+:   */
+/*   env_var_free.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,9 +13,16 @@
 #include "minishell.h"
 
 void
-	env_free_var(t_env_var *var)
+	env_var_free(t_env_var *var)
 {
-	ft_free_and_release((void **)(&(var->name)));
-	ft_free_and_release((void **)(&(var->value)));
-	ft_free_and_release((void **)(&var));
+	env_var_free_and_release(&var);
+}
+
+void
+	env_var_free_and_release(t_env_var **var)
+{
+	ft_free_and_release((void **)(&((*var)->name)));
+	ft_free_and_release((void **)(&((*var)->value)));
+	ft_free_and_release((void **)(&(*var)));
+	*var = NULL;
 }

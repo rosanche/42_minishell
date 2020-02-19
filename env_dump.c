@@ -33,8 +33,8 @@ void
 	while (index < g_env_variables.size)
 	{
 		item = (t_env_var *)g_env_variables.items[index];
-		ft_printf("\e[92m%*s\e[0m = \e[93m%s\e[0m\n",
-					(int)(0 + longest), item->name, item->value);
+		ft_printf("%3d | \e[92m%*s\e[0m = \e[93m%s\e[0m\n",
+					index, (int)(0 + longest), item->name, item->value);
 		index++;
 	}
 }

@@ -88,8 +88,8 @@ void			builtin_handler_exit(t_minishell *shell, t_builtin_param param);
 
 typedef struct	s_env_var
 {
-	char		*name;
-	char		*value;
+	char	*name;
+	char	*value;
 }				t_env_var;
 
 t_arrlst		g_env_variables;
@@ -97,13 +97,19 @@ t_arrlst		g_env_variables;
 void			env_initialize(char **envp);
 int				env_load(char **envp);
 
-void			env_set_from_line(char *line);
-void			env_set(char *name, char *value);
+t_env_var		*env_var_create_from_line(char *line);
+t_env_var		*env_var_create(char *name, char *value);
 
-void			env_free_var(t_env_var *var);
+void			env_set_from_line(char *line);
+void			env_set(t_env_var *var);
+
+void			env_var_free(t_env_var *var);
+void			env_var_free_and_release(t_env_var **var);
 
 void			env_finalize(void);
 
 void			env_dump_content(void);
+
+int				env_compare_by_name(t_env_var *item, char *to);
 
 #endif
