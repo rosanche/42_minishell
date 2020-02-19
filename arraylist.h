@@ -33,6 +33,8 @@ void				arraylist_destroy(t_arrlst *alst);
 
 int					arraylist_insert(t_arrlst *alst, size_t pos, void *ptr);
 
+void				*arraylist_get(t_arrlst *alst, void *ptr);
+
 int					arraylist_add(t_arrlst *alst, void *ptr);
 int					arraylist_add_all(t_arrlst *alst, t_arrlst *other);
 

@@ -12,22 +12,10 @@
 
 #include "minishell.h"
 
-void
-	env_set_from_line(char *line)
+t_env_var
+	*env_get_by_name(char *name)
 {
-	t_env_var	*var;
-
-	var = env_var_create_from_line(line);
-	if (var == NULL)
-		return ;
-	env_set(var);
-}
-
-void
-	env_set(t_env_var *var)
-{
-	if (var == NULL)
-		return ;
-	env_unset_from_name(var->name);
-	arraylist_add(&g_env_variables, var);
+	if (name == NULL)
+		return (NULL);
+	return ((t_env_var *)arraylist_get(&g_env_variables, name));
 }

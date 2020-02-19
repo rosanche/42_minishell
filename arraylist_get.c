@@ -1,33 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_set.c                                          :+:      :+:    :+:   */
+/*   arraylist_remove_at.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 19:04:44 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 19:04:44 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/19 13:33:19 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/19 13:33:19 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "arraylist.h"
 
 void
-	env_set_from_line(char *line)
+	*arraylist_get(t_arrlst *alst, void *ptr)
 {
-	t_env_var	*var;
+	ssize_t	index;
 
-	var = env_var_create_from_line(line);
-	if (var == NULL)
-		return ;
-	env_set(var);
-}
-
-void
-	env_set(t_env_var *var)
-{
-	if (var == NULL)
-		return ;
-	env_unset_from_name(var->name);
-	arraylist_add(&g_env_variables, var);
+	if ((index = arraylist_index_of(alst, ptr)) < 0)
+		return (0);
+	return (alst->items[index]);
 }

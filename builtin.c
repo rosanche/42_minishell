@@ -30,7 +30,7 @@ t_builtin	g_builtin[] = {
 		.name = BIN_EXPORT
 	},
 	{
-		.handler = NULL,
+		.handler = &builtin_handler_unset,
 		.name = BIN_UNSET
 	},
 	{

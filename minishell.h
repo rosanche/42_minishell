@@ -41,6 +41,8 @@
 # define ERR_TOO_MANY_ARGS "too many arguments"
 # define ERR_NUM_ARG_REQ "numeric argument required"
 
+# define BASE_HOME_DIRECTORY "/Users/"
+
 typedef struct	s_minishell
 {
 	char	*name;
@@ -83,6 +85,7 @@ void			builtin_handler_echo(t_minishell *shell, t_builtin_param param);
 void			builtin_handler_cd(t_minishell *shell, t_builtin_param param);
 void			builtin_handler_pwd(t_minishell *shell, t_builtin_param param);
 void			builtin_handler_export(t_minishell *shell, t_builtin_param param);
+void			builtin_handler_unset(t_minishell *shell, t_builtin_param param);
 void			builtin_handler_env(t_minishell *shell, t_builtin_param param);
 void			builtin_handler_exit(t_minishell *shell, t_builtin_param param);
 
@@ -102,6 +105,10 @@ t_env_var		*env_var_create(char *name, char *value);
 
 void			env_set_from_line(char *line);
 void			env_set(t_env_var *var);
+
+void			env_unset_from_name(char *name);
+
+t_env_var		*env_get_by_name(char *name);
 
 void			env_var_free(t_env_var *var);
 void			env_var_free_and_release(t_env_var **var);

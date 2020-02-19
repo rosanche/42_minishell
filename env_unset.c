@@ -13,21 +13,9 @@
 #include "minishell.h"
 
 void
-	env_set_from_line(char *line)
+	env_unset_from_name(char *name)
 {
-	t_env_var	*var;
-
-	var = env_var_create_from_line(line);
-	if (var == NULL)
+	if (name == NULL)
 		return ;
-	env_set(var);
-}
-
-void
-	env_set(t_env_var *var)
-{
-	if (var == NULL)
-		return ;
-	env_unset_from_name(var->name);
-	arraylist_add(&g_env_variables, var);
+	arraylist_remove(&g_env_variables, name, &env_var_free);
 }
