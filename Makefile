@@ -11,6 +11,7 @@ FLAGS = -Wall -Wextra -Werror
 SRCS = arraylist_add.c \
 		arraylist_create.c \
 		arraylist_destroy.c \
+		arraylist_get.c \
 		arraylist_grow.c \
 		arraylist_index_of.c \
 		arraylist_init.c \
@@ -25,13 +26,16 @@ SRCS = arraylist_add.c \
 		builtin_handler_exit.c \
 		builtin_handler_export.c \
 		builtin_handler_pwd.c \
+		builtin_handler_unset.c \
 		destructor.c \
 		env_compare.c \
 		env_dump.c \
 		env_finalize.c \
+		env_get.c \
 		env_initializer.c \
 		env_loader.c \
 		env_set.c \
+		env_unset.c \
 		env_var_creator.c \
 		env_var_free.c \
 		main.c \
@@ -40,7 +44,7 @@ SRCS = arraylist_add.c \
 		minishell_evaluator.c \
 		minishell_exit.c \
 		minishell_initialize.c \
-		minishell_pre_loop.c 
+		minishell_pre_loop.c \
 
 OBJ = $(SRCS:%.c=%.o)
 
@@ -55,6 +59,7 @@ makelib:
 
 $(NAME) : $(OBJ) | makelib
 	gcc -I $(INC) $(OBJ) $(LIB) $(PRINTF) -o $(NAME) 
+	chmod +x minishell
 
 clean:
 	$(RM) $(OBJ)
