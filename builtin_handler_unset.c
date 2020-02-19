@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_set.c                                          :+:      :+:    :+:   */
+/*   builtin_handler_export.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 19:04:44 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 19:04:44 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/18 15:22:51 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/18 15:22:51 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void
-	env_set_from_line(char *line)
+	builtin_handler_unset(t_minishell *shell, t_builtin_param param)
 {
-	t_env_var	*var;
+	size_t	index;
 
-	var = env_var_create_from_line(line);
-	if (var == NULL)
-		return ;
-	env_set(var);
-}
-
-void
-	env_set(t_env_var *var)
-{
-	if (var == NULL)
-		return ;
-	env_unset_from_name(var->name);
-	arraylist_add(&g_env_variables, var);
+	index = 1;
+	while (index < param.argc)
+	{
+		env_unset_from_name(param.argv[index]);
+		index++;
+	}
 }
