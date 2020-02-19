@@ -41,6 +41,8 @@
 # define ERR_TOO_MANY_ARGS "too many arguments"
 # define ERR_NUM_ARG_REQ "numeric argument required"
 
+# define BASE_HOME_DIRECTORY "/Users/"
+
 typedef struct	s_minishell
 {
 	char	*name;
@@ -105,6 +107,8 @@ void			env_set_from_line(char *line);
 void			env_set(t_env_var *var);
 
 void			env_unset_from_name(char *name);
+
+t_env_var		*env_get_by_name(char *name);
 
 void			env_var_free(t_env_var *var);
 void			env_var_free_and_release(t_env_var **var);
