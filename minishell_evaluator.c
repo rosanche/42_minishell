@@ -25,4 +25,6 @@ void
 	if (!minishell_evaluate_builtin(shell, &arglst))
 		if (!exec(name, env_array_get(shell), (char **)arglst.items))
 			minishell_error(shell, name, ERR_CMD_NOT_FOUND);
+	arraylist_clear(&arglst, &free);
+	arraylist_destroy_items(&arglst);
 }

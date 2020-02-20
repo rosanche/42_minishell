@@ -26,7 +26,8 @@ char
 void
 	env_array_invalidate(void)
 {
-	ft_free_and_release((void **)(&g_env_array));
+	if (g_env_array != NULL)
+		ft_split_free(&g_env_array);
 	g_env_array_valid = 0;
 }
 

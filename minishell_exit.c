@@ -16,5 +16,7 @@ void
 	minishell_exit(t_minishell *shell, char code)
 {
 	// TODO Free if needed
+	env_array_invalidate();
+	env_finalize();
 	exit(code);
 }

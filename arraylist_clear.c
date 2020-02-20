@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   arraylist_remove.c                                 :+:      :+:    :+:   */
+/*   arraylist_clear.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,13 +13,12 @@
 #include "arraylist.h"
 
 int
-	arraylist_remove(t_arrlst *alst, void *ptr, void (*free_fct)())
+	arraylist_clear(t_arrlst *alst, void (*free_fct)())
 {
-	ssize_t	index;
-	size_t	pos;
-
-	if ((index = arraylist_index_of(alst, ptr)) < 0)
-		return (0);
-	pos = 0 + index;
-	return (arraylist_remove_at(alst, pos, free_fct));
+	while (alst->size != 0)
+	{
+		if (!arraylist_remove_at(alst, 0, free_fct))
+			return (0);
+	}
+	return (1);
 }

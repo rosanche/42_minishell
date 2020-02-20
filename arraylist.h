@@ -46,5 +46,6 @@ ssize_t				arraylist_index_of(t_arrlst *alst, void *ptr);
 
 int					arraylist_remove(t_arrlst *alst, void *ptr, void (*free_fct)());
 int					arraylist_remove_at(t_arrlst *alst, size_t pos, void (*free_fct)());
+int					arraylist_clear(t_arrlst *alst, void (*free_fct)());
 
 #endif

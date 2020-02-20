@@ -21,8 +21,8 @@ void
 void
 	env_var_free_and_release(t_env_var **var)
 {
-	ft_free_and_release((void **)(&((*var)->name)));
-	ft_free_and_release((void **)(&((*var)->value)));
-	ft_free_and_release((void **)(&(*var)));
+	free((*var)->name);
+	free((*var)->value);
+	free(*var);
 	*var = NULL;
 }

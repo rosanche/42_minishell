@@ -38,7 +38,7 @@ char
 	char	*arg;
 	size_t	index;
 
-	if (!(arg = malloc(chrlst->size)))
+	if (!(arg = (char *)malloc((chrlst->size + 1) * sizeof(char))))
 		return (NULL);
 	index = 0;
 	while (index < chrlst->size)
