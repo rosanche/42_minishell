@@ -83,6 +83,11 @@ SRCS	=	./ft_abs.c \
 			./ft_str_isdigit.c \
 			./ft_strjoin_free.c \
 			./ft_strjoin_sided.c \
+			./ft_atoi_base_insensitive.c \
+			./ft_ishex.c \
+			./ft_isoctal.c \
+			./ft_base_resolve.c \
+			./ft_base_validate.c \
 
 OBJS	= $(SRCS:.c=.o)
 RM		= rm -f
