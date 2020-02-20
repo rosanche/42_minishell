@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	minishell_input_loop(t_minishell *shell)
+	minishell_input_loop(t_minishell *shell, char **envp)
 {
 	char	*line;
 	int		ret;
@@ -23,7 +23,7 @@ void
 		ft_printf("%s$ ", shell->name);
 		ret = get_next_line(IN, &line);
 		if (line != NULL && ft_strlen(line) != 0)
-			minishell_evaluate(shell, line);
+			minishell_evaluate(shell, line, envp);
 		free(line);
 		if (ret <= 0)
 			break ;
