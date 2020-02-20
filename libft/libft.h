@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+#include "../ft_printf/ft_printf.h"
 
 # define IN 0
 # define OUT 1
