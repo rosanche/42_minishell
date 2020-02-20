@@ -69,9 +69,11 @@ t_builtin		g_builtin[BUILTIN_COUNT];
 
 void			minishell_initialize(t_minishell *shell, char *name);
 void			minishell_pre_loop(t_minishell *shell);
-void			minishell_input_loop(t_minishell *shell,char **envp);
+void			minishell_input_loop(t_minishell *shell);
 
-void			minishell_evaluate(t_minishell *shell, char *line, char **envp);
+void			minishell_evaluate(t_minishell *shell, char *line);
+void			minishell_evaluate_argument(t_arrlst *arglst, char *line);
+int				minishell_evaluate_builtin(t_minishell *shell, t_arrlst *arglst);
 
 void			minishell_error(t_minishell *shell, char *exec, char *error);
 void			minishell_exit(t_minishell *shell, char code);
@@ -132,8 +134,23 @@ typedef struct	s_cmd_group
 }				t_cmd_group;
 
 
-int				evaluate_quote(char *line, char of, size_t *consumed);
 size_t			evaluate_quote_size(char *line, size_t *consumed);
 int				evaluator_escape_backslash(char *seq, size_t *consumed);
+
+int				evaluate_quote(char *line, size_t *consumed, t_arrlst *chrlst);
+int				evaluate_quote_single(char *line, size_t *consumed, t_arrlst *chrlst);
+int				evaluate_quote_double(char *line, size_t *consumed, t_arrlst *chrlst);
+
+
+void			argument_builder_initialize(t_arrlst *chrlst);
+void			argument_builder_finalize(t_arrlst *chrlst);
+void			argument_builder_add_char(t_arrlst *chrlst, char chr, char quote);
+char			*argument_builder_build(t_arrlst *chrlst);
+
+int				g_argument_builder_debug;
+
+void			argument_builder_debug(int state);
+void			argument_builder_debug_print_char(char chr, char quote);
+void			argument_builder_debug_new(void);
 
 #endif

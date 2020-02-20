@@ -23,7 +23,8 @@ static int	g_escaped[255] = {
 	['t'] = '\t',
 	['v'] = '\v',
 	['\\'] = '\\',
-	['\''] = '\''
+	['\''] = '\'',
+	[' '] = ' '
 };
 
 static int
@@ -68,6 +69,8 @@ int
 	char	chr;
 	size_t	len;
 
+	if (!*seq)
+		return (-1);
 	*consumed = 0;
 	seq += seq[0] == '\\';
 	chr = (int)(0 + g_escaped[(int)*seq]);

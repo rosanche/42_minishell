@@ -16,7 +16,11 @@ void
 	arraylist_destroy_items(t_arrlst *alst)
 {
 	if (alst != NULL)
+	{
 		free(alst->items);
+		alst->size = 0;
+		alst->capacity = 0;
+	}
 }
 
 void

@@ -13,14 +13,25 @@
 #include "minishell.h"
 
 void
-	minishell_evaluate(t_minishell *shell, char *line)
+	minishell_evaluate_argument(t_arrlst *arglst, char *line)
 {
-	t_arrlst	arglst;
+	int			ret;
+	t_arrlst	chrlst;
+	size_t		consumed;
 
-	arraylist_init(&arglst, NULL, 5);
-	minishell_evaluate_argument(&arglst, line);
-	if (!minishell_evaluate_builtin(shell, &arglst))
+	argument_builder_debug(1);
+	while (1)
 	{
-		minishell_error(shell, (char *)(arglst.items[0]), ERR_CMD_NOT_FOUND);
+		argument_builder_initialize(&chrlst);
+		consumed = 0;
+		ret = evaluate_quote(line, &consumed, &chrlst);
+		line += consumed;
+		while (ft_iswspace(*line))
+			line++;
+		arraylist_add(arglst, argument_builder_build(&chrlst));
+		argument_builder_finalize(&chrlst);
+		argument_builder_debug_new();
+		if (!ret)
+			break ;
 	}
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_evaluator.c                              :+:      :+:    :+:   */
+/*   minishell_evaluator_builtin.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,15 +12,21 @@
 
 #include "minishell.h"
 
-void
-	minishell_evaluate(t_minishell *shell, char *line)
+int
+	minishell_evaluate_builtin(t_minishell *shell, t_arrlst *arglst)
 {
-	t_arrlst	arglst;
+	char		*name;
+	t_builtin	*builtin;
 
-	arraylist_init(&arglst, NULL, 5);
-	minishell_evaluate_argument(&arglst, line);
-	if (!minishell_evaluate_builtin(shell, &arglst))
+	if (arglst->size == 0 || (name = arglst->items[0]) == NULL)
+		return (0);
+	builtin = builtin_match(name);
+	if (builtin)
 	{
-		minishell_error(shell, (char *)(arglst.items[0]), ERR_CMD_NOT_FOUND);
+		(*(builtin->handler))(shell, (t_builtin_param) {
+			name, arglst->size, (char **)(arglst->items), OUT, ERR
+		});
+		return (1);
 	}
+	return (0);
 }
