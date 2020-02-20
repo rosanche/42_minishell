@@ -21,3 +21,9 @@ int
 	alst->size++;
 	return (1);
 }
+
+int
+	arraylist_add_char(t_arrlst *alst, char chr)
+{
+	return (arraylist_add(alst, (void *)((long)0 + chr)));
+}

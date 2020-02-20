@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_set.c                                          :+:      :+:    :+:   */
+/*   utility_find_home.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 19:04:44 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 19:04:44 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 18:58:35 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 18:58:35 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int
-	env_set_from_line(char *line)
+char
+	*utility_find_home_dir(void)
 {
 	t_env_var	*var;
 
-	var = env_var_create_from_line(line);
+	var = env_get_by_name("HOME");
+	if (var != NULL)
+		return (ft_strdup(var->value));
+	var = env_get_by_name("USER");
 	if (var == NULL)
-		return (0);
-	env_set(var);
-	return (1);
-}
-
-void
-	env_set(t_env_var *var)
-{
-	if (var == NULL)
-		return ;
-	env_unset_from_name(var->name);
-	arraylist_add(&g_env_variables, var);
-	env_array_invalidate();
+		var = env_get_by_name("LOGNAME");
+	if (var != NULL)
+		return (ft_strjoin(BASE_HOME_DIRECTORY, var->value));
+	return (ft_strdup("~"));
 }

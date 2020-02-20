@@ -24,7 +24,7 @@ int
 	if (builtin)
 	{
 		(*(builtin->handler))(shell, (t_builtin_param) {
-			name, arglst->size, (char **)(arglst->items), OUT, ERR
+			name, arglst->size - 1, (char **)(arglst->items), OUT, ERR
 		});
 		return (1);
 	}

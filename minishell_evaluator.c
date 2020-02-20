@@ -21,6 +21,7 @@ void
 
 	arraylist_init(&arglst, NULL, 5);
 	minishell_evaluate_argument(&arglst, line);
+	arraylist_add(&arglst, NULL);
 	name = arglst.items[0];
 	if (!minishell_evaluate_builtin(shell, &arglst))
 		if (!exec(name, env_array_get(shell), (char **)arglst.items))

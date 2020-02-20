@@ -26,7 +26,7 @@ typedef struct		s_arrlst
 }					t_arrlst;
 
 t_arrlst			*arraylist_create(size_t init_cap, void *cmp_method);
-void				arraylist_init(t_arrlst *alst, void *cmp_method, size_t grow_factor);
+void				arraylist_init(t_arrlst *alst, void *cmp, size_t g_fac);
 
 void				arraylist_destroy_items(t_arrlst *alst);
 void				arraylist_destroy(t_arrlst *alst);
@@ -36,7 +36,7 @@ int					arraylist_insert(t_arrlst *alst, size_t pos, void *ptr);
 void				*arraylist_get(t_arrlst *alst, void *ptr);
 
 int					arraylist_add(t_arrlst *alst, void *ptr);
-int					arraylist_add_all(t_arrlst *alst, t_arrlst *other);
+int					arraylist_add_char(t_arrlst *alst, char chr);
 
 size_t				arraylist_size(t_arrlst *alst);
 
@@ -44,8 +44,8 @@ int					arraylist_grow(t_arrlst *alst, size_t n);
 
 ssize_t				arraylist_index_of(t_arrlst *alst, void *ptr);
 
-int					arraylist_remove(t_arrlst *alst, void *ptr, void (*free_fct)());
-int					arraylist_remove_at(t_arrlst *alst, size_t pos, void (*free_fct)());
-int					arraylist_clear(t_arrlst *alst, void (*free_fct)());
+int					arraylist_remove(t_arrlst *alst, void *ptr, void (*del)());
+int					arraylist_remove_at(t_arrlst *l, size_t pos, void (*del)());
+int					arraylist_clear(t_arrlst *alst, void (*del)());
 
 #endif

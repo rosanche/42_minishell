@@ -16,6 +16,7 @@ void
 	builtin_handler_export(t_minishell *shell, t_builtin_param param)
 {
 	size_t	index;
+	char	*line;
 
 	if (param.argc == 1)
 		builtin_handler_env(shell, param);
@@ -24,7 +25,11 @@ void
 		index = 1;
 		while (index < param.argc)
 		{
-			env_set_from_line(param.argv[index]);
+			line = param.argv[index];
+			if (!env_var_is_name_valid(line, 1))
+				builtin_error(shell, param, line, ERR_NOT_VALID_ID);
+			else
+				env_set_from_line(line);
 			index++;
 		}
 	}

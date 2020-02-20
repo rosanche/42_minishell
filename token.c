@@ -1,35 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_set.c                                          :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 19:04:44 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 19:04:44 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 17:26:50 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 17:26:50 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int
-	env_set_from_line(char *line)
+t_token
+	*token_create(int kind, void *value)
 {
-	t_env_var	*var;
+	t_token	*tok;
 
-	var = env_var_create_from_line(line);
-	if (var == NULL)
-		return (0);
-	env_set(var);
-	return (1);
+	if (!(tok = malloc(sizeof(t_token))))
+		return (NULL);
+	tok->kind = kind;
+	tok->value = value;
+	return (tok);
 }
 
 void
-	env_set(t_env_var *var)
+	token_destroy(t_token *tok, int sub_free)
 {
-	if (var == NULL)
-		return ;
-	env_unset_from_name(var->name);
-	arraylist_add(&g_env_variables, var);
-	env_array_invalidate();
+	if (sub_free)
+	{
+		if (tok->kind == TOKEN_KIND_ARG_GROUP)
+			token_destroy_arg_group(tok->value);
+	}
+	free(tok);
 }

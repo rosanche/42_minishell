@@ -75,6 +75,29 @@ int
 }
 
 int
+	main0(int argc, char **argv)
+{
+	t_arrlst	*tokenlst = arraylist_create(10, NULL);
+	size_t		sub = 0;
+	evaluate_tokens(tokenlst, "echo Hello 'World From' \"Quo otes\" | cat -e > 'hello' >>", &sub);
+
+	for (size_t index = 0; index < tokenlst->size; index++)
+	{
+		ft_printf("kind: %s\n", (char *[]){
+				"--",
+				"ARG_GROUP",
+				"INPUT_FILE",
+				"OUTPUT_FILE",
+				"APPEND_FILE",
+				"PIPE",
+				"++"
+		}[((t_token *)tokenlst->items[index])->kind]);
+	}
+
+	return (EXIT_SUCCESS);
+}
+
+int
 	main(int argc, char **argv, char **envp)
 {
 	t_minishell	shell;

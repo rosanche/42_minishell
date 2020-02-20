@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "arraylist.h"
-#include "ft_printf/ft_printf.h"
 
 int
 	arraylist_grow(t_arrlst *alst, size_t n)

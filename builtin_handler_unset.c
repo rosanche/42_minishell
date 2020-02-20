@@ -16,11 +16,16 @@ void
 	builtin_handler_unset(t_minishell *shell, t_builtin_param param)
 {
 	size_t	index;
+	char	*line;
 
 	index = 1;
 	while (index < param.argc)
 	{
-		env_unset_from_name(param.argv[index]);
+		line = param.argv[index];
+		if (!env_var_is_name_valid(line, 0))
+			builtin_error(shell, param, line, ERR_NOT_VALID_ID);
+		else
+			env_unset_from_name(line);
 		index++;
 	}
 }

@@ -1,35 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_set.c                                          :+:      :+:    :+:   */
+/*   evaluator_env_var.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 19:04:44 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 19:04:44 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 18:42:26 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 18:42:26 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int
-	env_set_from_line(char *line)
+	evaluate_env_var(char *line, size_t *consumed, t_arrlst *chrlst)
 {
-	t_env_var	*var;
-
-	var = env_var_create_from_line(line);
-	if (var == NULL)
+	if (*line != '$')
 		return (0);
-	env_set(var);
-	return (1);
-}
+	line++;
+	*consumed += 1;
 
-void
-	env_set(t_env_var *var)
-{
-	if (var == NULL)
-		return ;
-	env_unset_from_name(var->name);
-	arraylist_add(&g_env_variables, var);
-	env_array_invalidate();
+	return (0);
 }

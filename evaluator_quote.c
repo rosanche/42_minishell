@@ -99,7 +99,7 @@ int
 }
 
 int
-	evaluate_quote(char *line, size_t *consumed, t_arrlst *chrlst)
+	evaluate_next(char *line, size_t *consumed, t_arrlst *chrlst)
 {
 	int		ret;
 	size_t	sub;
@@ -134,8 +134,23 @@ int
 			*consumed += sub + 1;
 			line += sub + 1;
 		}
+		else if (*line == '~')
+		{
+			sub = 0;
+			evaluate_tilde(line, &sub, chrlst);
+			*consumed += sub;
+			line += sub;
+		}
 		else if (ft_iswspace(*line))
-			return (1);
+			return (TOKEN_KIND_ARG_GROUP);
+		else if (*line == '>' && *(line + 1) == '>')
+			return (TOKEN_KIND_APPEND_FILE);
+		else if (*line == '<')
+			return (TOKEN_KIND_INPUT_FILE);
+		else if (*line == '>')
+			return (TOKEN_KIND_OUTPUT_FILE);
+		else if (*line == '|')
+			return (TOKEN_KIND_PIPE);
 		else
 		{
 			argument_builder_add_char(chrlst, *line, 0);

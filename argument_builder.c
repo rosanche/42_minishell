@@ -26,9 +26,26 @@ void
 }
 
 void
+	argument_builder_add_string(t_arrlst *chrlst, char *str, char quote)
+{
+	size_t	len;
+	size_t	index;
+
+	len = ft_strlen(str);
+	arraylist_grow(chrlst, len);
+	index = 0;
+	while (index < len)
+	{
+		arraylist_add_char(chrlst, str[index]);
+		argument_builder_debug_print_char(str[index], quote);
+		index++;
+	}
+}
+
+void
 	argument_builder_add_char(t_arrlst *chrlst, char chr, char quote)
 {
-	arraylist_add(chrlst, (void *)((long)0 + chr));
+	arraylist_add_char(chrlst, chr);
 	argument_builder_debug_print_char(chr, quote);
 }
 

@@ -41,6 +41,9 @@
 # define ERR_CMD_NOT_FOUND "command not found"
 # define ERR_TOO_MANY_ARGS "too many arguments"
 # define ERR_NUM_ARG_REQ "numeric argument required"
+# define ERR_NOT_VALID_ID "not a valid identifier"
+
+# define INVALID 1
 
 # define BASE_HOME_DIRECTORY "/Users/"
 
@@ -113,7 +116,9 @@ int				env_load(char **envp);
 t_env_var		*env_var_create_from_line(char *line);
 t_env_var		*env_var_create(char *name, char *value);
 
-void			env_set_from_line(char *line);
+int				env_var_is_name_valid(char *name, int allow_equal);
+
+int				env_set_from_line(char *line);
 void			env_set(t_env_var *var);
 
 void			env_unset_from_name(char *name);
@@ -149,10 +154,11 @@ typedef struct	s_cmd_group
 size_t			evaluate_quote_size(char *line, size_t *consumed);
 int				evaluator_escape_backslash(char *seq, size_t *consumed);
 
-int				evaluate_quote(char *line, size_t *consumed, t_arrlst *chrlst);
+int				evaluate_next(char *line, size_t *consumed, t_arrlst *chrlst);
 int				evaluate_quote_single(char *line, size_t *consumed, t_arrlst *chrlst);
 int				evaluate_quote_double(char *line, size_t *consumed, t_arrlst *chrlst);
 
+int				evaluate_tilde(char *line, size_t *consumed, t_arrlst *chrlst);
 
 void			argument_builder_initialize(t_arrlst *chrlst);
 void			argument_builder_finalize(t_arrlst *chrlst);
@@ -175,5 +181,42 @@ void			signal_handler_quit(int sig);
 
 int				signal_has_interrupt(int and_reset);
 int				signal_has_quit(int and_reset);
+
+# define TOKEN_KIND_ARG_GROUP 1
+# define TOKEN_KIND_INPUT_FILE 2
+# define TOKEN_KIND_OUTPUT_FILE 3
+# define TOKEN_KIND_APPEND_FILE 4
+# define TOKEN_KIND_PIPE 5
+
+typedef struct	s_token
+{
+	int			kind;
+	void		*value;
+}				t_token;
+
+typedef struct	s_token_arg_group
+{
+	int			auto_free;
+	t_arrlst	*arglst;
+}				t_token_arg_group;
+
+typedef struct	s_token_io_file
+{
+	int		open_mode;
+	char	*path;
+}				t_token_io_file;
+
+void			evaluate_tokens(t_arrlst *tokenlst, char *line, size_t *consumed);
+
+t_token			*token_create(int kind, void *value);
+void			token_destroy(t_token *tok, int sub_free);
+
+t_token			*token_create_arg_group(t_arrlst *arglst, int auto_free);
+void			token_destroy_arg_group(t_token_arg_group *tok_arg);
+
+t_token			*token_create_io_file(int kind, char *path);
+void			token_destroy_io_file(t_token_io_file *tok_io);
+
+char			*utility_find_home_dir(void);
 
 #endif

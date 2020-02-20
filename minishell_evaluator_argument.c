@@ -24,14 +24,14 @@ void
 	{
 		argument_builder_initialize(&chrlst);
 		consumed = 0;
-		ret = evaluate_quote(line, &consumed, &chrlst);
+		ret = evaluate_next(line, &consumed, &chrlst);
 		line += consumed;
 		while (ft_iswspace(*line))
 			line++;
 		arraylist_add(arglst, argument_builder_build(&chrlst));
 		argument_builder_finalize(&chrlst);
 		argument_builder_debug_new();
-		if (!ret)
+		if (ret != TOKEN_KIND_ARG_GROUP)
 			break ;
 	}
 }

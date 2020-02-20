@@ -37,7 +37,6 @@ void
 	size_t		index;
 	t_env_var	*var;
 
-	ft_printf("env array building...\n");
 	env_array_invalidate();
 	if (!(g_env_array = malloc((g_env_variables.size + 1) * sizeof(void *))))
 		return ;
@@ -50,5 +49,4 @@ void
 	}
 	g_env_array[index] = NULL;
 	g_env_array_valid = 1;
-	ft_printf("env array building done\n");
 }

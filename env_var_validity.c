@@ -1,35 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_set.c                                          :+:      :+:    :+:   */
+/*   env_var_validity.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 19:04:44 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 19:04:44 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 19:22:10 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 19:22:10 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+** [a-zA-Z_]+[a-zA-Z0-9_]*
+*/
+
 int
-	env_set_from_line(char *line)
+	env_var_is_name_valid(char *name, int allow_equal)
 {
-	t_env_var	*var;
+	size_t	index;
 
-	var = env_var_create_from_line(line);
-	if (var == NULL)
+	if (name == NULL)
 		return (0);
-	env_set(var);
+	if (!ft_isalpha(*name) && *name != '_')
+		return (0);
+	index = 0;
+	name++;
+	while (*name)
+	{
+		if (allow_equal && *name == '=')
+			break ;
+		if (!ft_isalnum(*name) && !ft_isdigit(*name) && *name != '_')
+			return (0);
+		name++;
+	}
 	return (1);
-}
-
-void
-	env_set(t_env_var *var)
-{
-	if (var == NULL)
-		return ;
-	env_unset_from_name(var->name);
-	arraylist_add(&g_env_variables, var);
-	env_array_invalidate();
 }
