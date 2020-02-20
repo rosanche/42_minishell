@@ -69,9 +69,9 @@ t_builtin		g_builtin[BUILTIN_COUNT];
 
 void			minishell_initialize(t_minishell *shell, char *name);
 void			minishell_pre_loop(t_minishell *shell);
-void			minishell_input_loop(t_minishell *shell);
+void			minishell_input_loop(t_minishell *shell,char **envp);
 
-void			minishell_evaluate(t_minishell *shell, char *line);
+void			minishell_evaluate(t_minishell *shell, char *line, char **envp);
 
 void			minishell_error(t_minishell *shell, char *exec, char *error);
 void			minishell_exit(t_minishell *shell, char code);
