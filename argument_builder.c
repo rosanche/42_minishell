@@ -28,7 +28,7 @@ void
 void
 	argument_builder_add_char(t_arrlst *chrlst, char chr, char quote)
 {
-	arraylist_add(chrlst, (void *)chr);
+	arraylist_add(chrlst, (void *)((long)0 + chr));
 	argument_builder_debug_print_char(chr, quote);
 }
 

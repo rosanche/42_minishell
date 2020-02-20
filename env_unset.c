@@ -18,4 +18,5 @@ void
 	if (name == NULL)
 		return ;
 	arraylist_remove(&g_env_variables, name, &env_var_free);
+	env_array_invalidate();
 }

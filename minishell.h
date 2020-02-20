@@ -121,6 +121,10 @@ void			env_dump_content(void);
 
 int				env_compare_by_name(t_env_var *item, char *to);
 
+char			**env_array_get(t_minishell *shell);
+void			env_array_build(t_minishell *shell);
+void			env_array_invalidate(void);
+
 typedef struct	s_quote_ctx
 {
 	char	type;
