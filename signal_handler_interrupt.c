@@ -1,36 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   signal_handler_interrupt.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 15:33:08 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 15:33:08 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 14:50:11 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 14:50:11 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_minishell	*g_shell = NULL;
+int		g_signal_interrupt = 0;
 
 void
-	minishell_input_loop(t_minishell *shell)
+	signal_handler_interrupt(int sig)
 {
-	char	*line;
-	int		ret;
+	minishell_prompt_ask(g_shell, 1);
+	g_shell->last_code = 1;
+	g_signal_interrupt = 1;
+}
 
-	g_shell = shell;
-	while (1)
-	{
-		minishell_prompt_ask(shell, 0);
-		g_flag_in_read = 1;
-		ret = get_next_line(IN, &line);
-		g_flag_in_read = 0;
-		if (line != NULL && ft_strlen(line) != 0)
-			minishell_evaluate(shell, line);
-		free(line);
-		if (ret <= 0)
-			break ;
-	}
+int
+	signal_has_interrupt(int and_reset)
+{
+	int	value;
+
+	value = g_signal_interrupt;
+	if (and_reset)
+		g_signal_interrupt = 0;
+	return (value);
 }

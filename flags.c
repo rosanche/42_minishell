@@ -1,36 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   flags.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 15:33:08 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 15:33:08 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 15:08:17 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 15:08:17 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_minishell	*g_shell = NULL;
-
-void
-	minishell_input_loop(t_minishell *shell)
-{
-	char	*line;
-	int		ret;
-
-	g_shell = shell;
-	while (1)
-	{
-		minishell_prompt_ask(shell, 0);
-		g_flag_in_read = 1;
-		ret = get_next_line(IN, &line);
-		g_flag_in_read = 0;
-		if (line != NULL && ft_strlen(line) != 0)
-			minishell_evaluate(shell, line);
-		free(line);
-		if (ret <= 0)
-			break ;
-	}
-}
+int		g_flag_in_read = 0;

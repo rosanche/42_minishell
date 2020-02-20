@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <errno.h>
+# include <signal.h>
 
 # include "libft/libft.h"
 # include "libft/get_next_line.h"
@@ -46,6 +47,7 @@
 typedef struct	s_minishell
 {
 	char	*name;
+	char	last_code;
 }				t_minishell;
 
 typedef struct	s_builtin_param
@@ -65,7 +67,11 @@ typedef struct	s_builtin
 	char				*name;
 }				t_builtin;
 
+int				g_flag_in_read;
+
 t_builtin		g_builtin[BUILTIN_COUNT];
+
+t_minishell		*g_shell;
 
 void			minishell_initialize(t_minishell *shell, char *name);
 void			minishell_pre_loop(t_minishell *shell);
@@ -77,6 +83,8 @@ int				minishell_evaluate_builtin(t_minishell *shell, t_arrlst *arglst);
 
 void			minishell_error(t_minishell *shell, char *exec, char *error);
 void			minishell_exit(t_minishell *shell, char code);
+
+void			minishell_prompt_ask(t_minishell *shell, int with_new_line);
 
 t_builtin		*builtin_match(char *name);
 
@@ -156,5 +164,16 @@ int				g_argument_builder_debug;
 void			argument_builder_debug(int state);
 void			argument_builder_debug_print_char(char chr, char quote);
 void			argument_builder_debug_new(void);
+
+int				minishell_signals_attach(void);
+
+int				g_signal_interrupt;
+int				g_signal_quit;
+
+void			signal_handler_interrupt(int sig);
+void			signal_handler_quit(int sig);
+
+int				signal_has_interrupt(int and_reset);
+int				signal_has_quit(int and_reset);
 
 #endif

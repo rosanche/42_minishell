@@ -79,6 +79,7 @@ int
 {
 	t_minishell	shell;
 
+	minishell_signals_attach();
 	env_initialize(envp);
 	minishell_initialize(&shell, argv[0]);
 	minishell_pre_loop(&shell);

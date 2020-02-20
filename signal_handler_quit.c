@@ -1,36 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   signal_handler_quit.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 15:33:08 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 15:33:08 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 15:01:44 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 15:01:44 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_minishell	*g_shell = NULL;
+int		g_signal_quit = 0;
 
 void
-	minishell_input_loop(t_minishell *shell)
+	signal_handler_quit(int sig)
 {
-	char	*line;
-	int		ret;
+	ft_printf("Handled: %s (%d)\n", "QUIT", sig);
+}
 
-	g_shell = shell;
-	while (1)
-	{
-		minishell_prompt_ask(shell, 0);
-		g_flag_in_read = 1;
-		ret = get_next_line(IN, &line);
-		g_flag_in_read = 0;
-		if (line != NULL && ft_strlen(line) != 0)
-			minishell_evaluate(shell, line);
-		free(line);
-		if (ret <= 0)
-			break ;
-	}
+int
+	signal_has_quit(int and_reset)
+{
+	int	value;
+
+	value = g_signal_quit;
+	if (and_reset)
+		g_signal_quit = 0;
+	return (value);
 }
