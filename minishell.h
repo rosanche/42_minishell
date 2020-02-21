@@ -18,6 +18,10 @@
 # include <stdlib.h>
 # include <errno.h>
 # include <signal.h>
+# include <dirent.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/wait.h>
 
 # include "libft/libft.h"
 # include "libft/get_next_line.h"
@@ -29,6 +33,7 @@
 # define BUILTIN_COUNT 7
 
 # define DISPLAY_LOADED_VARS 1
+# define INTERRUPT_DOES_EXIT 1
 
 # define BIN_ECHO "echo"
 # define BIN_CD "cd"
@@ -49,8 +54,9 @@
 
 typedef struct	s_minishell
 {
-	char	*name;
-	char	last_code;
+	char		*name;
+	char		last_code;
+	t_arrlst	*pidlst;
 }				t_mshell;
 
 typedef struct	s_builtin_param
@@ -82,7 +88,6 @@ void			minishell_input_loop(t_mshell *shell);
 
 void			minishell_evaluate(t_mshell *shell, char *line);
 void			minishell_evaluate_argument(t_arrlst *arglst, char *line);
-int				minishell_evaluate_builtin(t_mshell *shell, t_arrlst *arglst);
 
 void			minishell_error(t_mshell *shell, char *exec, char *error);
 void			minishell_exit(t_mshell *shell, char code);
@@ -134,8 +139,8 @@ void			env_dump_content(void);
 
 int				env_compare_by_name(t_env_var *item, char *to);
 
-char			**env_array_get(t_mshell *shell);
-void			env_array_build(t_mshell *shell);
+char			**env_array_get(void);
+void			env_array_build(void);
 void			env_array_invalidate(void);
 
 typedef struct	s_quote_ctx
@@ -184,9 +189,9 @@ int				signal_has_interrupt(int and_reset);
 int				signal_has_quit(int and_reset);
 
 # define TOKEN_KIND_ARG_GROUP 1
-# define TOKEN_KIND_INPUT_FILE 2
-# define TOKEN_KIND_OUTPUT_FILE 3
-# define TOKEN_KIND_APPEND_FILE 4
+# define TOKEN_KIND_INPUT 2
+# define TOKEN_KIND_OUTPUT 3
+# define TOKEN_KIND_APPEND 4
 # define TOKEN_KIND_PIPE 5
 # define TOKEN_KIND_SEMICOLON 6
 
@@ -210,6 +215,7 @@ typedef struct	s_token_io_file
 
 t_token			*token_create(int kind, void *value);
 void			token_destroy(t_token *tok, int sub_free);
+void			token_destroy_sub(t_token *tok);
 
 t_token			*token_create_arg_group(t_arrlst *arglst, int auto_free);
 void			token_destroy_arg_group(t_token_arg_group *tok_arg);
@@ -218,5 +224,32 @@ t_token			*token_create_io_file(int kind, char *path);
 void			token_destroy_io_file(t_token_io_file *tok_io);
 
 char			*utility_find_home_dir(void);
+
+# define EB_ERR_NO_NEXT 1
+# define EB_ERR_INVALID_NEXT 2
+# define EB_ERR_EMPTY_NEXT 3
+# define EB_ERR_OPEN_FAIL 4
+
+# define EB_ERR_NO_NEXT_T "No file after operator."
+# define EB_ERR_INVALID_NEXT_T "Invalid syntax combinaison."
+# define EB_ERR_EMPTY_NEXT_T "File name empty."
+
+typedef struct	s_process
+{
+	char		*name;
+	char		*filepath;
+	int			is_dir;
+	t_arrlst	*arglst;
+	int			in_fd;
+	char		*in_file;
+	int			in_errno;
+	int			out_fd;
+	char		*out_file;
+	int			out_errno;
+	int			b_err;
+	pid_t		pid;
+}				t_process;
+
+void			process_destroy(t_process *process);
 
 #endif

@@ -70,11 +70,11 @@ int
 		else if (ft_iswspace(*line))
 			return (TOKEN_KIND_ARG_GROUP);
 		else if (*line == '>' && *(line + 1) == '>')
-			return (kind(chrlst, TOKEN_KIND_APPEND_FILE));
+			return (kind(chrlst, TOKEN_KIND_APPEND));
 		else if (*line == '<')
-			return (kind(chrlst, TOKEN_KIND_INPUT_FILE));
+			return (kind(chrlst, TOKEN_KIND_INPUT));
 		else if (*line == '>')
-			return (kind(chrlst, TOKEN_KIND_OUTPUT_FILE));
+			return (kind(chrlst, TOKEN_KIND_OUTPUT));
 		else if (*line == '|')
 			return (kind(chrlst, TOKEN_KIND_PIPE));
 		else if (*line == ';')

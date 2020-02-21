@@ -38,6 +38,8 @@ void				*arraylist_get(t_arrlst *alst, void *ptr);
 int					arraylist_add(t_arrlst *alst, void *ptr);
 int					arraylist_add_char(t_arrlst *alst, char chr);
 
+int					arraylist_add_all(t_arrlst *dstlst, t_arrlst *srclst);
+
 size_t				arraylist_size(t_arrlst *alst);
 
 int					arraylist_grow(t_arrlst *alst, size_t n);

@@ -13,18 +13,23 @@
 #include "minishell.h"
 
 int
-	minishell_evaluate_builtin(t_mshell *shell, t_arrlst *arglst)
+	minishell_evaluate_builtin(t_mshell *shell, t_process *process)
 {
-	char		*name;
 	t_builtin	*builtin;
+	t_arrlst	*arglst;
+	int			out;
 
-	if (arglst->size == 0 || (name = arglst->items[0]) == NULL)
+	arglst = process->arglst;
+	if (arglst->size == 0 || process->name == NULL)
 		return (0);
-	builtin = builtin_match(name);
+	builtin = builtin_match(process->name);
 	if (builtin)
 	{
+		out = process->out_fd;
+		if (out == -1)
+			out = OUT;
 		(*(builtin->handler))(shell, (t_builtin_param) {
-			name, arglst->size - 1, (char **)(arglst->items), OUT, ERR
+			process->name, arglst->size - 1, (char **)(arglst->items), out, ERR
 		});
 		return (1);
 	}

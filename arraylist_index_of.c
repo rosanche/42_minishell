@@ -17,14 +17,21 @@ ssize_t
 {
 	ssize_t	index;
 
-	if (alst == NULL || alst->cmp_method == NULL
-		|| alst->items == NULL || alst->size == 0)
+	if (alst == NULL || alst->items == NULL || alst->size == 0)
 		return (-2);
 	index = 0;
 	while (index < alst->size)
 	{
-		if ((*(alst->cmp_method))(alst->items[index], ptr) == 0)
-			return (index);
+		if (alst->cmp_method == NULL)
+		{
+			if (alst->items[index] == ptr)
+				return (index);
+		}
+		else
+		{
+			if ((*(alst->cmp_method))(alst->items[index], ptr) == 0)
+				return (index);
+		}
 		index++;
 	}
 	return (-1);

@@ -20,6 +20,10 @@ void
 	minishell_prompt_ask(g_shell, 1);
 	g_shell->last_code = 1;
 	g_signal_interrupt = 1;
+	if (g_shell->pidlst->size != 0)
+		minishell_process_kill(g_shell, sig);
+//	if (INTERRUPT_DOES_EXIT)
+//		exit(1);
 }
 
 int

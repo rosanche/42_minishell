@@ -15,12 +15,12 @@
 static int
 	kind_to_open_mode(int kind)
 {
-	if (kind == TOKEN_KIND_INPUT_FILE)
+	if (kind == TOKEN_KIND_INPUT)
 		return (O_RDONLY);
-	if (kind == TOKEN_KIND_OUTPUT_FILE)
-		return (O_WRONLY);
-	if (kind == TOKEN_KIND_APPEND_FILE)
-		return (O_APPEND);
+	if (kind == TOKEN_KIND_OUTPUT)
+		return (O_WRONLY | O_CREAT);
+	if (kind == TOKEN_KIND_APPEND)
+		return (O_WRONLY | O_APPEND | O_CREAT);
 	return (-1);
 }
 

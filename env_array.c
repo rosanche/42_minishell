@@ -16,10 +16,10 @@ char	**g_env_array = NULL;
 int		g_env_array_valid = 0;
 
 char
-	**env_array_get(t_mshell *shell)
+	**env_array_get(void)
 {
 	if (!g_env_array_valid)
-		env_array_build(shell);
+		env_array_build();
 	return (g_env_array);
 }
 
@@ -32,7 +32,7 @@ void
 }
 
 void
-	env_array_build(t_mshell *shell)
+	env_array_build(void)
 {
 	size_t		index;
 	t_env_var	*var;

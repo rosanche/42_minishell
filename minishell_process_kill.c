@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler_quit.c                              :+:      :+:    :+:   */
+/*   minishell_process_kill.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 15:01:44 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/20 15:01:44 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/21 19:04:07 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/21 19:04:07 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		g_signal_quit = 0;
-
 void
-	signal_handler_quit(int sig)
+	minishell_process_kill(t_mshell *shell, int sig)
 {
-	g_signal_quit = 1;
-	if (g_shell->pidlst->size != 0)
-		minishell_process_kill(g_shell, sig);
-}
+	size_t	index;
+	pid_t	pid;
 
-int
-	signal_has_quit(int and_reset)
-{
-	int	value;
-
-	value = g_signal_quit;
-	if (and_reset)
-		g_signal_quit = 0;
-	return (value);
+	index = 0;
+	while (index < shell->pidlst->size)
+	{
+		pid = (pid_t)shell->pidlst->items[index];
+		kill(pid, sig);
+		index++;
+	}
 }

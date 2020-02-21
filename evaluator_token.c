@@ -27,22 +27,22 @@ static int
 	size_t		sub;
 	t_arrlst	chrlst;
 
-	argument_builder_debug(1);
+	argument_builder_debug(0);
 	while (1)
 	{
 		arg_builder_initialize(&chrlst);
 		sub = 0;
 		ret = eval_next(line, &sub, &chrlst);
+		if (ret == 0 || ret == TOKEN_KIND_ARG_GROUP)
+			arraylist_add(arglst, arg_builder_build(&chrlst));
+		arg_builder_finalize(&chrlst);
+		argument_builder_debug_new();
 		line += sub;
 		while (ft_iswspace(*line))
 		{
 			line++;
 			sub++;
 		}
-		if (ret == TOKEN_KIND_ARG_GROUP)
-			arraylist_add(arglst, arg_builder_build(&chrlst));
-		arg_builder_finalize(&chrlst);
-		argument_builder_debug_new();
 		*consumed += sub;
 		if (ret != TOKEN_KIND_ARG_GROUP)
 			break ;
@@ -56,10 +56,10 @@ static int
 	int	ret;
 
 	ret = 1;
-	if (kind >= TOKEN_KIND_INPUT_FILE && kind <= TOKEN_KIND_APPEND_FILE)
+	if (kind >= TOKEN_KIND_INPUT && kind <= TOKEN_KIND_APPEND)
 	{
 		arraylist_add(tokenlst, token_create_io_file(kind, NULL));
-		ret += kind == TOKEN_KIND_APPEND_FILE;
+		ret += kind == TOKEN_KIND_APPEND;
 	}
 	else if (kind == TOKEN_KIND_PIPE)
 		arraylist_add(tokenlst, token_create(TOKEN_KIND_PIPE, NULL));

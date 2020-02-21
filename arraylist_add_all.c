@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler_quit.c                              :+:      :+:    :+:   */
+/*   arraylist_add.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 15:01:44 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/20 15:01:44 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/18 18:29:56 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/18 18:29:56 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int		g_signal_quit = 0;
-
-void
-	signal_handler_quit(int sig)
-{
-	g_signal_quit = 1;
-	if (g_shell->pidlst->size != 0)
-		minishell_process_kill(g_shell, sig);
-}
+#include "arraylist.h"
 
 int
-	signal_has_quit(int and_reset)
+	arraylist_add_all(t_arrlst *dstlst, t_arrlst *srclst)
 {
-	int	value;
+	size_t	index;
 
-	value = g_signal_quit;
-	if (and_reset)
-		g_signal_quit = 0;
-	return (value);
+	if (dstlst == NULL || srclst == NULL || dstlst->items == NULL
+			|| srclst->size == NULL || !arraylist_grow(dstlst, srclst->size))
+		return (0);
+	index = 0;
+	while (index < srclst->size)
+	{
+		if (!arraylist_add(dstlst, srclst->items[index]))
+			return (0);
+		index++;
+	}
+	return (1);
 }

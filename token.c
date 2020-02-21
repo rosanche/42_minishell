@@ -34,3 +34,9 @@ void
 	}
 	free(tok);
 }
+
+void
+	token_destroy_sub(t_token *tok)
+{
+	token_destroy(tok, 1);
+}
