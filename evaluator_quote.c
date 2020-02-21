@@ -13,13 +13,7 @@
 #include "minishell.h"
 
 int
-	is_quote(int c)
-{
-	return (c == '\"' || c == '\'');
-}
-
-int
-	evaluate_quote_single(char *line, size_t *consumed, t_arrlst *chrlst)
+	eval_q_single(char *line, size_t *consumed, t_arrlst *chrlst)
 {
 	int		ret;
 	size_t	sub;
@@ -30,16 +24,16 @@ int
 		{
 			if (*(line + 1) == '\'')
 			{
-				argument_builder_add_char(chrlst, '\\', '\'');
+				arg_builder_add_char(chrlst, '\\', '\'');
 				*consumed += 2;
 				return (0);
 			}
 			else
 			{
-				ret = evaluator_escape_backslash(line, &sub);
+				ret = eval_escape_backslash(line, &sub);
 				if (ret != -1)
 				{
-					argument_builder_add_char(chrlst, ret, '\'');
+					arg_builder_add_char(chrlst, ret, '\'');
 					*consumed += sub;
 					line += *consumed;
 				}
@@ -51,7 +45,7 @@ int
 			return (0);
 		}
 		else
-			argument_builder_add_char(chrlst, *line, '\'');
+			arg_builder_add_char(chrlst, *line, '\'');
 		*consumed += 1;
 		line++;
 	}
@@ -59,7 +53,7 @@ int
 }
 
 int
-	evaluate_quote_double(char *line, size_t *consumed, t_arrlst *chrlst)
+	eval_q_double(char *line, size_t *consumed, t_arrlst *chrlst)
 {
 	int		ret;
 	size_t	sub;
@@ -71,17 +65,17 @@ int
 			if (*(line + 1) == '\"')
 			{
 				line++;
-				argument_builder_add_char(chrlst, '\"', '\"');
+				arg_builder_add_char(chrlst, '\"', '\"');
 				*consumed += 1;
 			}
 			else
 			{
-				ret = evaluator_escape_backslash(line, &sub);
+				ret = eval_escape_backslash(line, &sub);
 				if (ret != -1)
 				{
-					argument_builder_add_char(chrlst, ret, '\"');
+					arg_builder_add_char(chrlst, ret, '\"');
 					*consumed += sub;
-					line += *consumed;
+					line += sub;
 				}
 			}
 		}
@@ -91,73 +85,9 @@ int
 			return (0);
 		}
 		else
-			argument_builder_add_char(chrlst, *line, '\"');
+			arg_builder_add_char(chrlst, *line, '\"');
 		*consumed += 1;
 		line++;
 	}
 	return (0);
 }
-
-int
-	evaluate_next(char *line, size_t *consumed, t_arrlst *chrlst)
-{
-	int		ret;
-	size_t	sub;
-
-	while (*line)
-	{
-		if (*line == '\\')
-		{
-			if (is_quote(*(line + 1)))
-			{
-				argument_builder_add_char(chrlst, *(line + 1), 0);
-				line += 2;
-				*consumed += 2;
-			}
-			else
-			{
-				line += 1;
-				*consumed += 1;
-			}
-		}
-		else if (*line == '\'')
-		{
-			sub = 0;
-			evaluate_quote_single(line + 1, &sub, chrlst);
-			*consumed += sub + 1;
-			line += sub + 1;
-		}
-		else if (*line == '\"')
-		{
-			sub = 0;
-			evaluate_quote_double(line + 1, &sub, chrlst);
-			*consumed += sub + 1;
-			line += sub + 1;
-		}
-		else if (*line == '~')
-		{
-			sub = 0;
-			evaluate_tilde(line, &sub, chrlst);
-			*consumed += sub;
-			line += sub;
-		}
-		else if (ft_iswspace(*line))
-			return (TOKEN_KIND_ARG_GROUP);
-		else if (*line == '>' && *(line + 1) == '>')
-			return (TOKEN_KIND_APPEND_FILE);
-		else if (*line == '<')
-			return (TOKEN_KIND_INPUT_FILE);
-		else if (*line == '>')
-			return (TOKEN_KIND_OUTPUT_FILE);
-		else if (*line == '|')
-			return (TOKEN_KIND_PIPE);
-		else
-		{
-			argument_builder_add_char(chrlst, *line, 0);
-			*consumed += 1;
-			line++;
-		}
-	}
-	return (0);
-}
-

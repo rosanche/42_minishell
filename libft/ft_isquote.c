@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_initialize.c                             :+:      :+:    :+:   */
+/*   ft_isquote.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 15:33:08 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 15:33:08 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/21 10:22:07 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/21 10:22:07 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void
-	minishell_initialize(t_mshell *shell, char *name)
+int
+	ft_isquote(int c)
 {
-	char *exec_name;
-
-	exec_name = ft_strrchr(name, '/');
-	shell->name = exec_name == NULL ? name : exec_name + 1;
+	return (c == '\"' || c == '\'');
 }

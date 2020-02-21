@@ -94,6 +94,7 @@ int					ft_islower(int c);
 int					ft_isupper(int c);
 int					ft_ishex(int c);
 int					ft_isoctal(int c);
+int					ft_isquote(int c);
 int					ft_isinstr(char c, char *charset);
 
 char				*ft_substr(char const *s, unsigned int start, size_t len);

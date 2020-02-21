@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 int
-	minishell_evaluate_builtin(t_minishell *shell, t_arrlst *arglst)
+	minishell_evaluate_builtin(t_mshell *shell, t_arrlst *arglst)
 {
 	char		*name;
 	t_builtin	*builtin;

@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	minishell_prompt_ask(t_minishell *shell, int with_new_line)
+	minishell_prompt_ask(t_mshell *shell, int with_new_line)
 {
 	if (with_new_line)
 		ft_putchar_fd('\n', OUT);

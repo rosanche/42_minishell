@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	builtin_handler_export(t_minishell *shell, t_builtin_param param)
+	builtin_handler_export(t_mshell *shell, t_builtin_param param)
 {
 	size_t	index;
 	char	*line;

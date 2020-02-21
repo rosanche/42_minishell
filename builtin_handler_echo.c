@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	builtin_handler_echo(t_minishell *shell, t_builtin_param param)
+	builtin_handler_echo(t_mshell *shell, t_builtin_param param)
 {
 	int	n_opt;
 	int	index;

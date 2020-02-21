@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 int
-	evaluate_tilde(char *line, size_t *consumed, t_arrlst *chrlst)
+	eval_tilde(char *line, size_t *consumed, t_arrlst *chrlst)
 {
 	char	*home;
 
@@ -21,6 +21,6 @@ int
 		return (0);
 	*consumed += 1;
 	home = utility_find_home_dir();
-	argument_builder_add_string(chrlst, home, 0);
+	arg_builder_add_string(chrlst, home, 0);
 	return (1);
 }

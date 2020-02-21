@@ -12,6 +12,10 @@
 
 #include "minishell.h"
 
+/*
+** -fsanitize=address
+*/
+
 int
 	main3(int argc, char **argv)
 {
@@ -37,7 +41,7 @@ int
 int
 	main4(int argc, char **argv)
 {
-	t_minishell	shell;
+	t_mshell	shell;
 
 	ft_printf("SHELLING %s\n", shell.name);
 
@@ -77,21 +81,43 @@ int
 int
 	main0(int argc, char **argv)
 {
-	t_arrlst	*tokenlst = arraylist_create(10, NULL);
-	size_t		sub = 0;
-	evaluate_tokens(tokenlst, "echo Hello 'World From' \"Quo otes\" | cat -e > 'hello' >>", &sub);
+	int			ret;
 
-	for (size_t index = 0; index < tokenlst->size; index++)
+	char *line = "echo Hello 'World From' \"Quo otes\" | cat -e> 'hello'>>;   asd asd asd asd ";
+	while (1)
 	{
-		ft_printf("kind: %s\n", (char *[]){
-				"--",
-				"ARG_GROUP",
-				"INPUT_FILE",
-				"OUTPUT_FILE",
-				"APPEND_FILE",
-				"PIPE",
-				"++"
-		}[((t_token *)tokenlst->items[index])->kind]);
+		ft_printf("++++++++++++++++ %s\n", line);
+		t_arrlst	*tokenlst = arraylist_create(10, NULL);
+		size_t		sub = 0;
+		ret = eval_tokens(tokenlst, line, &sub);
+		//ft_printf("ret %d, sub %d\n", ret, 0 + sub);
+		for (size_t index = 0; index < tokenlst->size; index++)
+		{
+			t_token *tok = (t_token *)tokenlst->items[index];
+			int kind = tok->kind;
+			ft_printf("kind: %d %s\n", kind, (char *[]){
+					"--",
+					"ARG_GROUP",
+					"INPUT_FILE",
+					"OUTPUT_FILE",
+					"APPEND_FILE",
+					"PIPE",
+					"SEMICOLON",
+					"++"
+			}[kind]);
+			if (kind == TOKEN_KIND_ARG_GROUP)
+			{
+				t_arrlst *arglst = ((t_token_arg_group *)tok->value)->arglst;
+				for (size_t jndex = 0; jndex < arglst->size; jndex++)
+				{
+					ft_printf("\t- '%s'\n", arglst->items[jndex]);
+				}
+			}
+		}
+		if (!ret)
+			break ;
+		line += sub;
+		ft_printf("-------------- sub %d, %s\n", 0 + sub, line);
 	}
 
 	return (EXIT_SUCCESS);
@@ -100,7 +126,7 @@ int
 int
 	main(int argc, char **argv, char **envp)
 {
-	t_minishell	shell;
+	t_mshell	shell;
 
 	minishell_signals_attach();
 	env_initialize(envp);

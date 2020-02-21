@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	minishell_error(t_minishell *shell, char *exec, char *error)
+	minishell_error(t_mshell *shell, char *exec, char *error)
 {
 	if (error == NULL)
 		error = "error";

@@ -15,10 +15,13 @@
 /*
 ** ft_printf("ret = %d..%d, diff = %d\n", ret, 0 + consumed, line - start);
 ** ft_printf("skipped space\n");
+** ft_printf("||%d||", 0 + sub);
+** ft_printf(",%c,", *line);
+** ft_printf("kind %d, sub %d, line %s\n", kind, 0 + sub, line);
 */
 
-int
-	evaluate_token(t_arrlst *arglst, char *line, size_t *consumed)
+static int
+	next_token(t_arrlst *arglst, char *line, size_t *consumed)
 {
 	int			ret;
 	size_t		sub;
@@ -27,10 +30,9 @@ int
 	argument_builder_debug(1);
 	while (1)
 	{
-		argument_builder_initialize(&chrlst);
+		arg_builder_initialize(&chrlst);
 		sub = 0;
-		ret = evaluate_next(line, &sub, &chrlst);
-		ft_printf("||%d||", 0 + sub);
+		ret = eval_next(line, &sub, &chrlst);
 		line += sub;
 		while (ft_iswspace(*line))
 		{
@@ -38,43 +40,61 @@ int
 			sub++;
 		}
 		if (ret == TOKEN_KIND_ARG_GROUP)
-			arraylist_add(arglst, argument_builder_build(&chrlst));
-		argument_builder_finalize(&chrlst);
+			arraylist_add(arglst, arg_builder_build(&chrlst));
+		arg_builder_finalize(&chrlst);
 		argument_builder_debug_new();
 		*consumed += sub;
 		if (ret != TOKEN_KIND_ARG_GROUP)
 			break ;
 	}
-	return (arglst->size == 0 ? ret : TOKEN_KIND_ARG_GROUP);
+	return (arglst->size == 0 && ret != 0 ? ret : TOKEN_KIND_ARG_GROUP);
 }
 
-void
-	evaluate_tokens(t_arrlst *tokenlst, char *line, size_t *consumed)
+static int
+	handle(int kind, t_arrlst *tokenlst)
 {
-	int			ret;
+	int	ret;
+
+	ret = 1;
+	if (kind >= TOKEN_KIND_INPUT_FILE && kind <= TOKEN_KIND_APPEND_FILE)
+	{
+		arraylist_add(tokenlst, token_create_io_file(kind, NULL));
+		ret += kind == TOKEN_KIND_APPEND_FILE;
+	}
+	else if (kind == TOKEN_KIND_PIPE)
+		arraylist_add(tokenlst, token_create(TOKEN_KIND_PIPE, NULL));
+	else if (kind == TOKEN_KIND_SEMICOLON)
+	{
+		arraylist_add(tokenlst, token_create(TOKEN_KIND_SEMICOLON, NULL));
+		ret = 0;
+	}
+	return (ret);
+}
+
+int
+	eval_tokens(t_arrlst *tokenlst, char *line, size_t *consumed)
+{
+	int			kind;
 	size_t		sub;
 	t_arrlst	*arglst;
 
 	while (*line)
 	{
+		while (ft_iswspace(*line))
+			eval_consume(1, &line, consumed, 0);
 		arglst = arraylist_create(10, NULL);
 		sub = 0;
-		ret = evaluate_token(arglst, line, &sub);
-		line += sub;
-		*consumed += sub;
-		if (ret == TOKEN_KIND_ARG_GROUP)
+		kind = next_token(arglst, line, &sub);
+		eval_consume(sub + (kind == TOKEN_KIND_SEMICOLON), &line, consumed, 0);
+		if (kind == TOKEN_KIND_ARG_GROUP)
 			arraylist_add(tokenlst, token_create_arg_group(arglst, 1));
 		else
 		{
 			arraylist_destroy(arglst);
-			if (ret >= TOKEN_KIND_INPUT_FILE && ret <= TOKEN_KIND_APPEND_FILE)
-			{
-				arraylist_add(tokenlst, token_create_io_file(ret, ""));
-				line += ret == TOKEN_KIND_APPEND_FILE;
-			}
-			else if (ret == TOKEN_KIND_PIPE)
-				arraylist_add(tokenlst, token_create(TOKEN_KIND_PIPE, NULL));
-			line += 1;
+			eval_consume(handle(kind, tokenlst), &line, consumed, 0);
+			if (kind == TOKEN_KIND_SEMICOLON)
+				return (1);
 		}
 	}
+	return (0);
 }

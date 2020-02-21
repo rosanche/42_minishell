@@ -13,12 +13,11 @@
 #include "minishell.h"
 
 void
-	builtin_error(t_minishell *shell, t_builtin_param param,
+	builtin_error(t_mshell *shell, t_builtin_param param,
 					char *arg, char *error)
 {
 	if (error == NULL)
 		error = "error";
-
 	if (arg == NULL)
 	{
 		ft_dprintf(param.fd_err, "%s: %s: %s\n",
@@ -32,7 +31,7 @@ void
 }
 
 void
-	builtin_errno(t_minishell *shell, t_builtin_param param, char *arg)
+	builtin_errno(t_mshell *shell, t_builtin_param param, char *arg)
 {
 	builtin_error(shell, param, arg, strerror(errno));
 	errno = 0;

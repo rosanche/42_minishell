@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	builtin_handler_cd(t_minishell *shell, t_builtin_param param)
+	builtin_handler_cd(t_mshell *shell, t_builtin_param param)
 {
 	char	*path;
 

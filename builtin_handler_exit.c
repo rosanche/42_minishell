@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	builtin_handler_exit(t_minishell *shell, t_builtin_param param)
+	builtin_handler_exit(t_mshell *shell, t_builtin_param param)
 {
 	char	code;
 

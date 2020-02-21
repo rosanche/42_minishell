@@ -37,7 +37,7 @@ t_token
 	if (!(tok_io = malloc(sizeof(t_token_io_file))))
 		return (NULL);
 	tok_io->open_mode = open_mode;
-	tok_io->path = ft_strdup(path);
+	tok_io->path = path == NULL ? NULL : ft_strdup(path);
 	if (!(tok = token_create(kind, tok_io)))
 	{
 		token_destroy_io_file(tok_io);

@@ -64,7 +64,7 @@ static int
 }
 
 int
-	evaluator_escape_backslash(char *seq, size_t *consumed)
+	eval_escape_backslash(char *seq, size_t *consumed)
 {
 	char	chr;
 	size_t	len;

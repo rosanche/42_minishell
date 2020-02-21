@@ -13,12 +13,11 @@
 #include "minishell.h"
 
 int
-	evaluate_env_var(char *line, size_t *consumed, t_arrlst *chrlst)
+	eval_env_var(char *line, size_t *consumed, t_arrlst *chrlst)
 {
 	if (*line != '$')
 		return (0);
 	line++;
 	*consumed += 1;
-
 	return (0);
 }

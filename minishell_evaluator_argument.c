@@ -22,14 +22,14 @@ void
 	argument_builder_debug(1);
 	while (1)
 	{
-		argument_builder_initialize(&chrlst);
+		arg_builder_initialize(&chrlst);
 		consumed = 0;
-		ret = evaluate_next(line, &consumed, &chrlst);
+		ret = eval_next(line, &consumed, &chrlst);
 		line += consumed;
 		while (ft_iswspace(*line))
 			line++;
-		arraylist_add(arglst, argument_builder_build(&chrlst));
-		argument_builder_finalize(&chrlst);
+		arraylist_add(arglst, arg_builder_build(&chrlst));
+		arg_builder_finalize(&chrlst);
 		argument_builder_debug_new();
 		if (ret != TOKEN_KIND_ARG_GROUP)
 			break ;

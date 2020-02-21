@@ -51,7 +51,7 @@ typedef struct	s_minishell
 {
 	char	*name;
 	char	last_code;
-}				t_minishell;
+}				t_mshell;
 
 typedef struct	s_builtin_param
 {
@@ -62,7 +62,7 @@ typedef struct	s_builtin_param
 	int		fd_err;
 }				t_builtin_param;
 
-typedef void	(*t_builtin_handler)(t_minishell *, t_builtin_param);
+typedef void	(*t_builtin_handler)(t_mshell *, t_builtin_param);
 
 typedef struct	s_builtin
 {
@@ -74,33 +74,33 @@ int				g_flag_in_read;
 
 t_builtin		g_builtin[BUILTIN_COUNT];
 
-t_minishell		*g_shell;
+t_mshell		*g_shell;
 
-void			minishell_initialize(t_minishell *shell, char *name);
-void			minishell_pre_loop(t_minishell *shell);
-void			minishell_input_loop(t_minishell *shell);
+void			minishell_initialize(t_mshell *shell, char *name);
+void			minishell_pre_loop(t_mshell *shell);
+void			minishell_input_loop(t_mshell *shell);
 
-void			minishell_evaluate(t_minishell *shell, char *line);
+void			minishell_evaluate(t_mshell *shell, char *line);
 void			minishell_evaluate_argument(t_arrlst *arglst, char *line);
-int				minishell_evaluate_builtin(t_minishell *shell, t_arrlst *arglst);
+int				minishell_evaluate_builtin(t_mshell *shell, t_arrlst *arglst);
 
-void			minishell_error(t_minishell *shell, char *exec, char *error);
-void			minishell_exit(t_minishell *shell, char code);
+void			minishell_error(t_mshell *shell, char *exec, char *error);
+void			minishell_exit(t_mshell *shell, char code);
 
-void			minishell_prompt_ask(t_minishell *shell, int with_new_line);
+void			minishell_prompt_ask(t_mshell *shell, int with_new_line);
 
 t_builtin		*builtin_match(char *name);
 
-void			builtin_error(t_minishell *shell, t_builtin_param param, char *arg, char *error);
-void			builtin_errno(t_minishell *shell, t_builtin_param param, char *arg);
+void			builtin_error(t_mshell *s, t_builtin_param p, char *a, char *e);
+void			builtin_errno(t_mshell *s, t_builtin_param p, char *a);
 
-void			builtin_handler_echo(t_minishell *shell, t_builtin_param param);
-void			builtin_handler_cd(t_minishell *shell, t_builtin_param param);
-void			builtin_handler_pwd(t_minishell *shell, t_builtin_param param);
-void			builtin_handler_export(t_minishell *shell, t_builtin_param param);
-void			builtin_handler_unset(t_minishell *shell, t_builtin_param param);
-void			builtin_handler_env(t_minishell *shell, t_builtin_param param);
-void			builtin_handler_exit(t_minishell *shell, t_builtin_param param);
+void			builtin_handler_echo(t_mshell *shell, t_builtin_param param);
+void			builtin_handler_cd(t_mshell *shell, t_builtin_param param);
+void			builtin_handler_pwd(t_mshell *shell, t_builtin_param param);
+void			builtin_handler_export(t_mshell *shell, t_builtin_param param);
+void			builtin_handler_unset(t_mshell *shell, t_builtin_param param);
+void			builtin_handler_env(t_mshell *shell, t_builtin_param param);
+void			builtin_handler_exit(t_mshell *shell, t_builtin_param param);
 
 typedef struct	s_env_var
 {
@@ -134,8 +134,8 @@ void			env_dump_content(void);
 
 int				env_compare_by_name(t_env_var *item, char *to);
 
-char			**env_array_get(t_minishell *shell);
-void			env_array_build(t_minishell *shell);
+char			**env_array_get(t_mshell *shell);
+void			env_array_build(t_mshell *shell);
 void			env_array_invalidate(void);
 
 typedef struct	s_quote_ctx
@@ -150,20 +150,21 @@ typedef struct	s_cmd_group
 	char	*line;
 }				t_cmd_group;
 
+int				eval_next(char *line, size_t *consumed, t_arrlst *chrlst);
+int				eval_q_single(char *line, size_t *consumed, t_arrlst *chrlst);
+int				eval_q_double(char *line, size_t *consumed, t_arrlst *chrlst);
+int				eval_tilde(char *line, size_t *consumed, t_arrlst *chrlst);
+int				eval_env_var(char *line, size_t *consumed, t_arrlst *chrlst);
+int				eval_tokens(t_arrlst *tokenlst, char *line, size_t *consumed);
+int				eval_escape_backslash(char *seq, size_t *consumed);
 
-size_t			evaluate_quote_size(char *line, size_t *consumed);
-int				evaluator_escape_backslash(char *seq, size_t *consumed);
+int				eval_consume(size_t sub, char **line, size_t *consumed, int r);
 
-int				evaluate_next(char *line, size_t *consumed, t_arrlst *chrlst);
-int				evaluate_quote_single(char *line, size_t *consumed, t_arrlst *chrlst);
-int				evaluate_quote_double(char *line, size_t *consumed, t_arrlst *chrlst);
-
-int				evaluate_tilde(char *line, size_t *consumed, t_arrlst *chrlst);
-
-void			argument_builder_initialize(t_arrlst *chrlst);
-void			argument_builder_finalize(t_arrlst *chrlst);
-void			argument_builder_add_char(t_arrlst *chrlst, char chr, char quote);
-char			*argument_builder_build(t_arrlst *chrlst);
+void			arg_builder_initialize(t_arrlst *chrlst);
+void			arg_builder_finalize(t_arrlst *chrlst);
+void			arg_builder_add_char(t_arrlst *chrlst, char chr, char quote);
+void			arg_builder_add_string(t_arrlst *chrlst, char *str, char quote);
+char			*arg_builder_build(t_arrlst *chrlst);
 
 int				g_argument_builder_debug;
 
@@ -187,6 +188,7 @@ int				signal_has_quit(int and_reset);
 # define TOKEN_KIND_OUTPUT_FILE 3
 # define TOKEN_KIND_APPEND_FILE 4
 # define TOKEN_KIND_PIPE 5
+# define TOKEN_KIND_SEMICOLON 6
 
 typedef struct	s_token
 {
@@ -205,8 +207,6 @@ typedef struct	s_token_io_file
 	int		open_mode;
 	char	*path;
 }				t_token_io_file;
-
-void			evaluate_tokens(t_arrlst *tokenlst, char *line, size_t *consumed);
 
 t_token			*token_create(int kind, void *value);
 void			token_destroy(t_token *tok, int sub_free);

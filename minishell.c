@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-t_minishell	*g_shell = NULL;
+t_mshell	*g_shell = NULL;
 
 void
-	minishell_input_loop(t_minishell *shell)
+	minishell_input_loop(t_mshell *shell)
 {
 	char	*line;
 	int		ret;

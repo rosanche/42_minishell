@@ -13,9 +13,8 @@
 #include "minishell.h"
 
 void
-	minishell_exit(t_minishell *shell, char code)
+	minishell_exit(t_mshell *shell, char code)
 {
-	// TODO Free if needed
 	env_array_invalidate();
 	env_finalize();
 	exit(code);
