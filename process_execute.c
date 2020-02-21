@@ -35,7 +35,5 @@ void
 	{
 		pid_as_ptr = (void *)((long)0 + process->pid);
 		arraylist_add(g_shell->pidlst, pid_as_ptr);
-		waitpid(process->pid, NULL, 0);
-		arraylist_remove(g_shell->pidlst, pid_as_ptr, NULL);
 	}
 }

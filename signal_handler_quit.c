@@ -19,7 +19,10 @@ void
 {
 	g_signal_quit = 1;
 	if (g_shell->pidlst->size != 0)
+	{
+		ft_printf("Quit: %d\n", sig);
 		minishell_process_kill(g_shell, sig);
+	}
 }
 
 int

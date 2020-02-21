@@ -55,7 +55,7 @@
 typedef struct	s_minishell
 {
 	char		*name;
-	char		last_code;
+	int			last_code;
 	t_arrlst	*pidlst;
 }				t_mshell;
 

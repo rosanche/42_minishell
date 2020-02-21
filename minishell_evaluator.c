@@ -21,6 +21,19 @@ static int
 }
 
 static void
+	wait_pids(void)
+{
+	pid_t	pid;
+
+	while (g_shell->pidlst->size != 0)
+	{
+		pid = (pid_t)(0 + g_shell->pidlst->items[0]);
+		waitpid(pid, &(g_shell->last_code), 0);
+		arraylist_remove_at(g_shell->pidlst, 0, NULL);
+	}
+}
+
+static void
 	minishell_execute_process(t_mshell *shell, t_arrlst *processlst)
 {
 	t_process	*process;
@@ -45,6 +58,7 @@ static void
 		}
 		arraylist_remove_at(processlst, 0, &process_destroy);
 	}
+	wait_pids();
 }
 
 void
