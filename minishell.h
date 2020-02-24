@@ -110,6 +110,7 @@ void			builtin_handler_exit(t_mshell *shell, t_builtin_param param);
 typedef struct	s_env_var
 {
 	char	*name;
+	size_t	name_len;
 	char	*value;
 }				t_env_var;
 
@@ -122,6 +123,7 @@ t_env_var		*env_var_create_from_line(char *line);
 t_env_var		*env_var_create(char *name, char *value);
 
 int				env_var_is_name_valid(char *name, int allow_equal);
+int				env_var_is_name_valid_len(char *name, int allow_equal);
 
 int				env_set_from_line(char *line);
 void			env_set(t_env_var *var);

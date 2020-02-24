@@ -84,6 +84,12 @@ int
 			*consumed += 1;
 			return (0);
 		}
+		else if (*line == '$')
+		{
+			sub = 0;
+			eval_env_var(line, &sub, chrlst);
+			return (eval_consume(sub, &line, consumed, 1));
+		}
 		else
 			arg_builder_add_char(chrlst, *line, '\"');
 		*consumed += 1;

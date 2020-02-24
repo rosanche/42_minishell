@@ -15,8 +15,8 @@
 int
 	minishell_signals_attach(void)
 {
-	if (signal(SIGINT, &signal_handler_interrupt) == SIG_ERR)
-		return (0);
+//	if (signal(SIGINT, &signal_handler_interrupt) == SIG_ERR)
+//		return (0);
 	if (signal(SIGQUIT, &signal_handler_quit) == SIG_ERR)
 		return (0);
 	return (1);

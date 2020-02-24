@@ -19,13 +19,10 @@
 int
 	env_var_is_name_valid(char *name, int allow_equal)
 {
-	size_t	index;
-
 	if (name == NULL)
 		return (0);
 	if (!ft_isalpha(*name) && *name != '_')
 		return (0);
-	index = 0;
 	name++;
 	while (*name)
 	{
@@ -36,4 +33,25 @@ int
 		name++;
 	}
 	return (1);
+}
+
+int
+	env_var_is_name_valid_len(char *name, int allow_equal)
+{
+	char	*start;
+
+	start = name;
+	if (name != NULL && (ft_isalpha(*name) || *name == '_'))
+	{
+		name++;
+		while (*name)
+		{
+			if (!allow_equal && *name == '=')
+				break ;
+			if (!ft_isalnum(*name) && !ft_isdigit(*name) && *name != '_')
+				break ;
+			name++;
+		}
+	}
+	return (name - start);
 }

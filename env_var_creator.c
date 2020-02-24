@@ -33,6 +33,7 @@ t_env_var
 	if (!(var = (t_env_var *)malloc(sizeof(t_env_var))))
 		return (NULL);
 	var->name = ft_strdup(name);
+	var->name_len = ft_strlen(name);
 	var->value = ft_strdup(value);
 	if (var->name == NULL || var->value == NULL)
 		env_var_free_and_release(&var);
