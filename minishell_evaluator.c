@@ -82,7 +82,16 @@ static int
 				{
 					exit(EXIT_FAILURE);
 				}
-				else if (process->pid == 0)
+				else if (process->pid)
+				{
+					int status = 0;
+					wait(&status);
+					if (WIFEXITED(status))
+						g_shell->last_code = WEXITSTATUS(status);
+					close(p[1]);
+					fd_in = p[0]; //save the input for the next command
+				}
+				else
 				{
 					dup2(fd_in, 0);
 					if (index < processlst->size)
@@ -94,23 +103,6 @@ static int
 
 					exit(EXIT_FAILURE);
 				}
-				else
-				{
-					wait(NULL);
-					int status = 0;
-					ft_printf("wait %d", waitpid(process->pid, &status, 0));
-					if (WIFEXITED(status))
-					{
-						ft_printf("____%d\n", WEXITSTATUS(status));
-					}
-					close(p[1]);
-					fd_in = p[0]; //save the input for the next command
-				}
-
-
-
-
-
 
 			}
 			else
