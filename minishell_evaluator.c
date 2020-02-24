@@ -16,8 +16,8 @@ static int
 	minishell_evaluate_next_tokens(t_arrlst **tokenlst, size_t *sub, char *line)
 {
 	if (!(*tokenlst = arraylist_create(10, NULL)))
-		return (NULL);
-	return (eval_tokens(*tokenlst, line, &sub));
+		return (0);
+	return (eval_tokens(*tokenlst, line, sub));
 }
 
 static void

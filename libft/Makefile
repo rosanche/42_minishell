@@ -88,6 +88,8 @@ SRCS	=	./ft_abs.c \
 			./ft_isoctal.c \
 			./ft_base_resolve.c \
 			./ft_base_validate.c \
+			./ft_strjoin3.c \
+			./ft_isquote.c
 
 OBJS	= $(SRCS:.c=.o)
 RM		= rm -f

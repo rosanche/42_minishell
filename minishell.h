@@ -247,8 +247,14 @@ typedef struct	s_process
 	char		*out_file;
 	int			out_errno;
 	int			b_err;
+	int   		p[2];
 	pid_t		pid;
 }				t_process;
+
+int				minishell_evaluate_builtin(t_mshell *shell, t_process *process);
+int				process_find_path(t_process *process);
+void			process_execute(t_process *process);
+void			executor_builder(t_arrlst *toklst, t_arrlst *processlst);
 
 void			process_destroy(t_process *process);
 

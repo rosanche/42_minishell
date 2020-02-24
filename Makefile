@@ -8,7 +8,11 @@ INC = minishell.h
 
 FLAGS = -Wall -Wextra -Werror
 
-SRCS = arraylist_add.c \
+SRCS = argument_builder.c \
+		argument_builder_debugger.c \
+		arraylist_add.c \
+		arraylist_add_all.c \
+		arraylist_clear.c \
 		arraylist_create.c \
 		arraylist_destroy.c \
 		arraylist_get.c \
@@ -28,6 +32,7 @@ SRCS = arraylist_add.c \
 		builtin_handler_pwd.c \
 		builtin_handler_unset.c \
 		destructor.c \
+		env_array.c \
 		env_compare.c \
 		env_dump.c \
 		env_finalize.c \
@@ -38,16 +43,42 @@ SRCS = arraylist_add.c \
 		env_unset.c \
 		env_var_creator.c \
 		env_var_free.c \
+		env_var_validity.c \
+		evaluator_env_var.c \
+		evaluator_escape_backslash.c \
+		evaluator_next.c \
+		evaluator_quote.c \
+		evaluator_tilde.c \
+		evaluator_token.c \
+		evaluator_utilities.c \
+		exec.c \
+		executor_builder.c \
+		executor_builder_args.c \
+		executor_builder_io.c \
+		flags.c \
 		main.c \
 		minishell.c \
 		minishell_error.c \
 		minishell_evaluator.c \
+		minishell_evaluator_argument.c \
+		minishell_evaluator_builtin.c \
 		minishell_exit.c \
 		minishell_initialize.c \
 		minishell_pre_loop.c \
-		exec.c \
-		evaluator_quote.c \
-		evaluator_escape_backslash.c \
+		minishell_process_kill.c \
+		minishell_prompt.c \
+		minishell_signals.c \
+		process_debugger.c \
+		process_destroy.c \
+		process_execute.c \
+		process_file_finder.c \
+		signal_handler_interrupt.c \
+		signal_handler_quit.c \
+		test.c \
+		token.c \
+		token_arg_group.c \
+		token_io_file.c \
+		utility_find_home.c 
 
 OBJ = $(SRCS:%.c=%.o)
 
