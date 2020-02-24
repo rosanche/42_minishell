@@ -47,6 +47,7 @@
 # define ERR_TOO_MANY_ARGS "too many arguments"
 # define ERR_NUM_ARG_REQ "numeric argument required"
 # define ERR_NOT_VALID_ID "not a valid identifier"
+# define ERR_UNEXPECTED "unexpected syntax"
 
 # define INVALID 1
 

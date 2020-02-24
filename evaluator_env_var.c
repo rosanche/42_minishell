@@ -60,10 +60,10 @@ int
 	eval_consume(1, &line, consumed, 0);
 	if (len == 0)
 	{
+		if (*line == '?')
+			return (consume_last_code(line, consumed, chrlst));
 		arg_builder_add_char(chrlst, '$', 0);
 		return (1);
 	}
-	if (*line == '?')
-		return (consume_last_code(line, consumed, chrlst));
 	return (consume_env_var(line, consumed, chrlst, len));
 }

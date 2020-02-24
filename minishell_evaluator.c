@@ -33,32 +33,95 @@ static void
 	}
 }
 
-static void
+static int
 	minishell_execute_process(t_mshell *shell, t_arrlst *processlst)
 {
 	t_process	*process;
+	size_t		index;
+	int			err;
 
-	while (processlst->size != 0)
+	err = 0;
+	index = 0;
+	while (index != processlst->size)
 	{
-		process = (t_process *)processlst->items[0];
+		process = (t_process *)processlst->items[index];
+		index++;
 		if (process == NULL)
 			break ;
-//		process_print_struct(process);
 		arraylist_add(process->arglst, NULL);
 		process->name = process->arglst->items[0];
 		process->name = process->name == NULL ? NULL : ft_strdup(process->name);
+		if (process->name == NULL)
+		{
+			minishell_error_simple(shell, ERR_UNEXPECTED);
+			err = 1;
+			break;
+		}
+	}
+
+	int p[2];
+	int fd_in = 0;
+
+	index = 0;
+	while (index < processlst->size)
+	{
+		process = (t_process*)processlst->items[index];
+		index++;
 		if (process->b_err == 0)
 		{
 			if (minishell_evaluate_builtin(shell, process))
 				;
 			else if (process_find_path(process))
-				process_execute(process);
+			{
+				//process_execute(process);
+
+				pipe(p);
+
+
+				if ((process->pid = fork()) == -1)
+				{
+					exit(EXIT_FAILURE);
+				}
+				else if (process->pid == 0)
+				{
+					dup2(fd_in, 0);
+					if (index < processlst->size)
+						dup2(p[1], 1);
+					close(p[0]);
+
+					char **argv = (char **)process->arglst->items;
+					execve(process->filepath, argv, env_array_get());
+
+					exit(EXIT_FAILURE);
+				}
+				else
+				{
+					wait(NULL);
+					int status = 0;
+					ft_printf("wait %d", waitpid(process->pid, &status, 0));
+					if (WIFEXITED(status))
+					{
+						ft_printf("____%d\n", WEXITSTATUS(status));
+					}
+					close(p[1]);
+					fd_in = p[0]; //save the input for the next command
+				}
+
+
+
+
+
+
+			}
 			else
 				minishell_error(shell, process->name, ERR_CMD_NOT_FOUND);
 		}
-		arraylist_remove_at(processlst, 0, &process_destroy);
 	}
+
+
+	arraylist_clear(processlst, &process_destroy);
 	wait_pids();
+	return (err);
 }
 
 void
@@ -68,6 +131,7 @@ void
 	size_t		sub;
 	t_arrlst	*tokenlst;
 	int			ret;
+	int			err;
 
 	while (1)
 	{
@@ -75,12 +139,12 @@ void
 		ret = minishell_evaluate_next_tokens(&tokenlst, &sub, line);
 		processlst = arraylist_create(5, NULL);
 		executor_builder(tokenlst, processlst);
-		minishell_execute_process(shell, processlst);
+		err = minishell_execute_process(shell, processlst);
 		arraylist_destroy(processlst);
 		arraylist_clear(tokenlst, &token_destroy_sub);
 		arraylist_destroy(tokenlst);
 		line += sub;
-		if (*line == '\0' || !ret)
+		if (*line == '\0' || !ret || err)
 			break ;
 	}
 }
