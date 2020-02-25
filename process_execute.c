@@ -44,9 +44,12 @@ static void
 static void
 	child(t_process *process, int fd_in, int has_more, int p[2])
 {
+	int		fd_out;
+
+	fd_out = has_more ? p[1] : OUT;
+	fd_out = process->out_fd == -1 ? fd_out : process->out_fd;
 	dup2(fd_in, IN);
-	if (has_more)
-		dup2(p[1], OUT);
+	dup2(fd_out, OUT);
 	close(p[0]);
 	if (minishell_evaluate_builtin(g_shell, process))
 		exit(EXIT_SUCCESS);
@@ -70,6 +73,7 @@ void
 	while (index < processlst->size)
 	{
 		process = (t_process*)processlst->items[index];
+		fd_in = process->in_fd == -1 ? fd_in : process->in_fd;
 		index++;
 		if (process->b_err == 0)
 		{
