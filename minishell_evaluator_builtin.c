@@ -25,9 +25,7 @@ int
 	builtin = builtin_match(process->name);
 	if (builtin)
 	{
-		out = process->out_fd;
-		if (out == -1)
-			out = OUT;
+		out = process->out_fd == -1 ? OUT : process->out_fd;
 		(*(builtin->handler))(shell, (t_builtin_param) {
 			process->name, arglst->size - 1, (char **)(arglst->items), out, ERR
 		});

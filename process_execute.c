@@ -12,44 +12,67 @@
 
 #include "minishell.h"
 
-void
-	process_execute(t_process *process)
+static void
+	wait_pid(int p[], int *fd_in)
 {
-	char	**argv;
-	void	*pid_as_ptr;
-	char *ls[] = {"ls", NULL};
-	char *grep[] = {"grep", "pipe", NULL};
-	char *wc[] = {"wc", NULL};
-	char ***cmd = {ls, grep, wc, NULL};
+	int status;
 
+	status = 0;
+	wait(&status);
+	if (WIFEXITED(status))
+		g_shell->last_code = WEXITSTATUS(status);
+	close(p[1]);
+	*fd_in = p[0];
+}
 
-	if (process->is_dir)
+static void
+	execute(t_process *process)
+{
+	char **argv;
+
+	arraylist_add_int(g_shell->pidlst, process->pid);
+	argv = (char **)process->arglst->items;
+	if (execve(process->filepath, argv, env_array_get()) == -1)
 	{
-		minishell_error_file(g_shell, process->filepath, EISDIR);
-		return ;
+		minishell_error(g_shell, process->name, strerror(errno));
+		arraylist_remove(g_shell->pidlst, process->pid, NULL);
+		exit(EXIT_FAILURE);
 	}
-	while (*cmd != NULL)
-    {
-		pipe(process->p);
-		process->pid = fork();
-		if (process->pid == 0)
+}
+
+void
+	process_execute_list(t_arrlst *processlst)
+{
+	t_process	*process;
+	size_t		index;
+	int			p[2];
+	int			fd_in;
+
+	index = 0;
+	fd_in = 0;
+	while (index < processlst->size)
+	{
+		process = (t_process*)processlst->items[index];
+		index++;
+		if (process->b_err == 0)
 		{
-			dup2(process->in_fd == -1 ? IN : process->in_fd, IN);
-			dup2(process->out_fd == -1 ? OUT : process->out_fd, OUT);
-			if (*(cmd + 1) != NULL)
-            	dup2(process->p[1], 1);
-			close(process->p[0]);
-			argv = (char **)process->arglst->items;
-			execve(process->filepath, argv, env_array_get());
-		}
-		else
-		{
-			pid_as_ptr = (void *)((long)0 + process->pid);
-			arraylist_add(g_shell->pidlst, pid_as_ptr);
-			wait(NULL);
-			close(process->p[1]);
-			process->in_fd = process->p[0]; //save the input for the next command
-			cmd++;
+			pipe(p);
+			if ((process->pid = fork()))
+				wait_pid(p, &fd_in);
+			else
+			{
+				dup2(fd_in, IN);
+				if (index < processlst->size)
+					dup2(p[1], OUT);
+				close(p[0]);
+				if (minishell_evaluate_builtin(g_shell, process))
+					exit(EXIT_SUCCESS);
+				else if (process_find_path(process))
+					execute(process);
+				else
+					minishell_error(g_shell, process->name, ERR_CMD_NOT_FOUND);
+				exit(EXIT_FAILURE);
+			}
 		}
 	}
 }

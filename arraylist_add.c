@@ -27,3 +27,9 @@ int
 {
 	return (arraylist_add(alst, (void *)((long)0 + chr)));
 }
+
+int
+	arraylist_add_int(t_arrlst *alst, int integer)
+{
+	return (arraylist_add(alst, (void *)((long)0 + integer)));
+}

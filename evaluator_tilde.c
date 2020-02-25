@@ -22,5 +22,6 @@ int
 	*consumed += 1;
 	home = utility_find_home_dir();
 	arg_builder_add_string(chrlst, home, 0);
+	free(home);
 	return (1);
 }

@@ -55,64 +55,11 @@ static int
 		{
 			minishell_error_simple(shell, ERR_UNEXPECTED);
 			err = 1;
-			break;
+			break ;
 		}
 	}
-
-	int p[2];
-	int fd_in = 0;
-
-	index = 0;
-	while (index < processlst->size)
-	{
-		process = (t_process*)processlst->items[index];
-		index++;
-		if (process->b_err == 0)
-		{
-			if (minishell_evaluate_builtin(shell, process))
-				;
-			else if (process_find_path(process))
-			{
-				//process_execute(process);
-
-				pipe(p);
-
-
-				if ((process->pid = fork()) == -1)
-				{
-					exit(EXIT_FAILURE);
-				}
-				else if (process->pid)
-				{
-					int status = 0;
-					wait(&status);
-					if (WIFEXITED(status))
-						g_shell->last_code = WEXITSTATUS(status);
-					close(p[1]);
-					fd_in = p[0]; //save the input for the next command
-				}
-				else
-				{
-					dup2(fd_in, 0);
-					if (index < processlst->size)
-						dup2(p[1], 1);
-					close(p[0]);
-
-					char **argv = (char **)process->arglst->items;
-					execve(process->filepath, argv, env_array_get());
-
-					exit(EXIT_FAILURE);
-				}
-
-			}
-			else
-				minishell_error(shell, process->name, ERR_CMD_NOT_FOUND);
-		}
-	}
-
-
+	process_execute_list(processlst);
 	arraylist_clear(processlst, &process_destroy);
-	wait_pids();
 	return (err);
 }
 

@@ -48,6 +48,7 @@
 # define ERR_NUM_ARG_REQ "numeric argument required"
 # define ERR_NOT_VALID_ID "not a valid identifier"
 # define ERR_UNEXPECTED "unexpected syntax"
+# define ERR_FORK_FAILED "failed to fork()"
 
 # define INVALID 1
 
@@ -250,11 +251,9 @@ typedef struct	s_process
 	char		*out_file;
 	int			out_errno;
 	int			b_err;
-	int   		p[2];
 	pid_t		pid;
 }				t_process;
 
-int				minishell_evaluate_builtin(t_mshell *shell, t_process *process);
 int				process_find_path(t_process *process);
 void			process_execute(t_process *process);
 void			executor_builder(t_arrlst *toklst, t_arrlst *processlst);
