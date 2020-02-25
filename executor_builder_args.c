@@ -15,10 +15,10 @@
 int
 	executor_builder_arg_add(t_process *process, t_token *tok)
 {
-	t_token_arg_group	*tok_arg;
-
-	tok_arg = (t_token_arg_group *)tok->value;
-	arraylist_add_all(process->arglst, tok_arg->arglst);
-	arraylist_clear(tok_arg->arglst, NULL);
+//	t_token_arg_group	*tok_arg;
+//
+//	tok_arg = (t_token_arg_group *)tok->value;
+//	arraylist_add_all(process->arglst, tok_arg->arglst);
+//	arraylist_clear(tok_arg->arglst, NULL);
 	return (0);
 }

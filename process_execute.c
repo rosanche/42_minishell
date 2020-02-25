@@ -19,6 +19,7 @@ static void
 
 	status = 0;
 	wait(&status);
+	g_shell->last_pid = 0;
 	if (WIFEXITED(status))
 		g_shell->last_code = WEXITSTATUS(status);
 	close(p[1]);
@@ -30,14 +31,30 @@ static void
 {
 	char **argv;
 
-	arraylist_add_int(g_shell->pidlst, process->pid);
+	g_shell->last_pid = process->pid;
 	argv = (char **)process->arglst->items;
 	if (execve(process->filepath, argv, env_array_get()) == -1)
 	{
 		minishell_error(g_shell, process->name, strerror(errno));
-		arraylist_remove(g_shell->pidlst, process->pid, NULL);
+		g_shell->last_pid = 0;
 		exit(EXIT_FAILURE);
 	}
+}
+
+static void
+	child(t_process *process, int fd_in, int has_more, int p[2])
+{
+	dup2(fd_in, IN);
+	if (has_more)
+		dup2(p[1], OUT);
+	close(p[0]);
+	if (minishell_evaluate_builtin(g_shell, process))
+		exit(EXIT_SUCCESS);
+	else if (process_find_path(process))
+		execute(process);
+	else
+		minishell_error(g_shell, process->name, ERR_CMD_NOT_FOUND);
+	exit(EXIT_FAILURE);
 }
 
 void
@@ -60,19 +77,7 @@ void
 			if ((process->pid = fork()))
 				wait_pid(p, &fd_in);
 			else
-			{
-				dup2(fd_in, IN);
-				if (index < processlst->size)
-					dup2(p[1], OUT);
-				close(p[0]);
-				if (minishell_evaluate_builtin(g_shell, process))
-					exit(EXIT_SUCCESS);
-				else if (process_find_path(process))
-					execute(process);
-				else
-					minishell_error(g_shell, process->name, ERR_CMD_NOT_FOUND);
-				exit(EXIT_FAILURE);
-			}
+				child(process, fd_in, index < processlst->size, p);
 		}
 	}
 }

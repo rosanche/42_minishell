@@ -28,12 +28,22 @@ void
 	}
 	ft_printf("%20s]\n", "");
 	ft_printf("%20s : %d\n", "in_fd", process->in_fd);
-	ft_printf("%20s : %s\n", "in_file", process->in_file);
-	ft_printf("%20s : %d\n", "in_errno", process->in_errno);
 	ft_printf("%20s : %d\n", "out_fd", process->out_fd);
-	ft_printf("%20s : %s\n", "out_file", process->out_file);
-	ft_printf("%20s : %d\n", "out_errno", process->out_errno);
 	ft_printf("%20s : %d\n", "builder_err", process->b_err);
 	ft_printf("%20s : %d\n", "pid", 0 + process->pid);
 	ft_printf("}\n");
+}
+
+void
+	process_print_struct_arrlst(t_arrlst *processlst)
+{
+	size_t		index;
+	t_process	*process;
+
+	index = 0;
+	while (index < processlst->size)
+	{
+		process = (t_process *)processlst->items[index++];
+		process_print_struct(process);
+	}
 }

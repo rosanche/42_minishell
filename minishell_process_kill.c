@@ -15,14 +15,7 @@
 void
 	minishell_process_kill(t_mshell *shell, int sig)
 {
-	size_t	index;
-	pid_t	pid;
-
-	index = 0;
-	while (index < shell->pidlst->size)
-	{
-		pid = (pid_t)shell->pidlst->items[index];
-		kill(pid, sig);
-		index++;
-	}
+	if (shell->last_pid != 0)
+		kill(shell->last_pid, sig);
+	shell->last_pid = 0;
 }

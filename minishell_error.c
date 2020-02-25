@@ -27,7 +27,7 @@ void
 }
 
 void
-	minishell_error_file(t_mshell *shell, char *file, int err_no)
+	shell_error_file(t_mshell *shell, char *file, int err_no)
 {
 	ft_dprintf(ERR, "%s: %s: %s\n", shell->name, file, strerror(err_no));
 	g_shell->last_code = err_no;

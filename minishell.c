@@ -20,7 +20,6 @@ void
 	char	*line;
 	int		ret;
 
-	g_shell = shell;
 	while (1)
 	{
 		minishell_prompt_ask(shell, 0);

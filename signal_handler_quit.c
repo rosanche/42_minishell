@@ -17,12 +17,15 @@ int		g_signal_quit = 0;
 void
 	signal_handler_quit(int sig)
 {
+	signal(SIGQUIT, SIG_IGN);
 	g_signal_quit = 1;
-	if (g_shell->pidlst->size != 0)
+	ft_printf("signal_handler_quit\n", sig);
+	if (g_shell->last_pid != 0)
 	{
 		ft_printf("Quit: %d\n", sig);
 		minishell_process_kill(g_shell, sig);
 	}
+	signal(SIGQUIT, &signal_handler_quit);
 }
 
 int

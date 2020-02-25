@@ -13,30 +13,17 @@
 #include "minishell.h"
 
 t_token
-	*token_create_arg_group(t_arrlst *arglst, int auto_free)
+	*token_create_string(char *string)
 {
-	t_token				*tok;
-	t_token_arg_group	*tok_arg;
+	t_token		*tok;
+	char		*dup;
 
-	if (!(tok_arg = malloc(sizeof(t_token_arg_group))))
+	if (!(dup = ft_strdup(string)))
 		return (NULL);
-	tok_arg->auto_free = auto_free;
-	tok_arg->arglst = arglst;
-	if (!(tok = token_create(TOKEN_KIND_ARG_GROUP, tok_arg)))
+	if (!(tok = token_create(TOKEN_KIND_STRING, dup)))
 	{
-		token_destroy_arg_group(tok_arg);
+		free(dup);
 		return (NULL);
 	}
 	return (tok);
-}
-
-void
-	token_destroy_arg_group(t_token_arg_group *tok_arg)
-{
-	if (tok_arg->auto_free)
-	{
-		arraylist_clear(tok_arg->arglst, &free);
-		arraylist_destroy(tok_arg->arglst);
-	}
-	free(tok_arg);
 }

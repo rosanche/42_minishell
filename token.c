@@ -29,8 +29,8 @@ void
 {
 	if (sub_free)
 	{
-		if (tok->kind == TOKEN_KIND_ARG_GROUP)
-			token_destroy_arg_group(tok->value);
+		if (tok->kind == TOKEN_KIND_STRING)
+			free(tok->value);
 	}
 	free(tok);
 }

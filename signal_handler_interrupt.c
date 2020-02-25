@@ -17,14 +17,16 @@ int		g_signal_interrupt = 0;
 void
 	signal_handler_interrupt(int sig)
 {
-	if (g_shell->pidlst->size != 0)
+	signal(SIGINT, SIG_IGN);
+	g_signal_interrupt = 1;
+	if (g_shell->last_pid != 0)
 		minishell_process_kill(g_shell, sig);
 	else
 		minishell_prompt_ask(g_shell, 1);
 	g_shell->last_code = 130;
-	g_signal_interrupt = 1;
 	//	if (INTERRUPT_DOES_EXIT)
 	//		exit(1);
+	signal(SIGINT, &signal_handler_interrupt);
 }
 
 int

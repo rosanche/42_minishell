@@ -31,7 +31,7 @@ void
 		arraylist_add(arglst, arg_builder_build(&chrlst));
 		arg_builder_finalize(&chrlst);
 		argument_builder_debug_new();
-		if (ret != TOKEN_KIND_ARG_GROUP)
+		if (ret != TOKEN_KIND_STRING)
 			break ;
 	}
 }

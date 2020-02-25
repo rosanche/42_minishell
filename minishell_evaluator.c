@@ -20,19 +20,6 @@ static int
 	return (eval_tokens(*tokenlst, line, sub));
 }
 
-static void
-	wait_pids(void)
-{
-	pid_t	pid;
-
-	while (g_shell->pidlst->size != 0)
-	{
-		pid = (pid_t)(0 + g_shell->pidlst->items[0]);
-		waitpid(pid, &(g_shell->last_code), 0);
-		arraylist_remove_at(g_shell->pidlst, 0, NULL);
-	}
-}
-
 static int
 	minishell_execute_process(t_mshell *shell, t_arrlst *processlst)
 {
@@ -44,8 +31,7 @@ static int
 	index = 0;
 	while (index != processlst->size)
 	{
-		process = (t_process *)processlst->items[index];
-		index++;
+		process = (t_process *)processlst->items[index++];
 		if (process == NULL)
 			break ;
 		arraylist_add(process->arglst, NULL);
@@ -58,9 +44,36 @@ static int
 			break ;
 		}
 	}
+	process_print_struct_arrlst(processlst);
 	process_execute_list(processlst);
 	arraylist_clear(processlst, &process_destroy);
 	return (err);
+}
+
+static int
+	handled_executor_builder(t_arrlst *toklst, t_arrlst *processlst)
+{
+	size_t		index;
+	int			ret;
+	t_token		*tok;
+
+	index = 0;
+	ret = executor_builder(&index, toklst, processlst);
+	tok = (t_token *)(toklst->items[index]);
+	if (ret == EB_ERR_OPEN_FAIL)
+		shell_error_file(g_shell, tok->value, errno);
+	else if (ret != 0)
+	{
+		minishell_error_simple(g_shell, (char *[]){
+				NULL,
+				EB_ERR_NO_NEXT_T,
+				EB_ERR_SYNTAX_T,
+				EB_ERR_EMPTY_NEXT_T,
+				NULL,
+				EB_ERR_NO_NAME_T
+		}[ret]);
+	}
+	return (ret);
 }
 
 void
@@ -69,21 +82,21 @@ void
 	t_arrlst	*processlst;
 	size_t		sub;
 	t_arrlst	*tokenlst;
-	int			ret;
+	int			ret[2];
 	int			err;
 
 	while (1)
 	{
 		sub = 0;
-		ret = minishell_evaluate_next_tokens(&tokenlst, &sub, line);
+		ret[0] = minishell_evaluate_next_tokens(&tokenlst, &sub, line);
 		processlst = arraylist_create(5, NULL);
-		executor_builder(tokenlst, processlst);
+		ret[1] = handled_executor_builder(tokenlst, processlst);
 		err = minishell_execute_process(shell, processlst);
 		arraylist_destroy(processlst);
 		arraylist_clear(tokenlst, &token_destroy_sub);
 		arraylist_destroy(tokenlst);
 		line += sub;
-		if (*line == '\0' || !ret || err)
+		if (*line == '\0' || !ret[0] || ret[1] || err)
 			break ;
 	}
 }

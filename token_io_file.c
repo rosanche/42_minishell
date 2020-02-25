@@ -25,30 +25,21 @@ static int
 }
 
 t_token
-	*token_create_io_file(int kind, char *path)
+	*token_create_io(int kind)
 {
 	int				open_mode;
 	t_token			*tok;
-	t_token_io_file	*tok_io;
 
 	open_mode = kind_to_open_mode(kind);
 	if (open_mode == -1)
 		return (NULL);
-	if (!(tok_io = malloc(sizeof(t_token_io_file))))
-		return (NULL);
-	tok_io->open_mode = open_mode;
-	tok_io->path = path == NULL ? NULL : ft_strdup(path);
-	if (!(tok = token_create(kind, tok_io)))
-	{
-		token_destroy_io_file(tok_io);
-		return (NULL);
-	}
-	return (tok);
+	return (tok = token_create(kind, (void *)0 + open_mode));
 }
 
-void
-	token_destroy_io_file(t_token_io_file *tok_io)
+int
+	token_is_io(int kind)
 {
-	free(tok_io->path);
-	free(tok_io);
+	return (kind == TOKEN_KIND_INPUT
+			|| kind == TOKEN_KIND_OUTPUT
+			|| kind == TOKEN_KIND_APPEND);
 }

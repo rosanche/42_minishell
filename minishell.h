@@ -58,7 +58,7 @@ typedef struct	s_minishell
 {
 	char		*name;
 	int			last_code;
-	t_arrlst	*pidlst;
+	pid_t		last_pid;
 }				t_mshell;
 
 typedef struct	s_builtin_param
@@ -164,7 +164,6 @@ int				eval_q_single(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_q_double(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_tilde(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_env_var(char *line, size_t *consumed, t_arrlst *chrlst);
-int				eval_tokens(t_arrlst *tokenlst, char *line, size_t *consumed);
 int				eval_escape_backslash(char *seq, size_t *consumed);
 
 int				eval_consume(size_t sub, char **line, size_t *consumed, int r);
@@ -192,7 +191,7 @@ void			signal_handler_quit(int sig);
 int				signal_has_interrupt(int and_reset);
 int				signal_has_quit(int and_reset);
 
-# define TOKEN_KIND_ARG_GROUP 1
+# define TOKEN_KIND_STRING 1
 # define TOKEN_KIND_INPUT 2
 # define TOKEN_KIND_OUTPUT 3
 # define TOKEN_KIND_APPEND 4
@@ -205,38 +204,26 @@ typedef struct	s_token
 	void		*value;
 }				t_token;
 
-typedef struct	s_token_arg_group
-{
-	int			auto_free;
-	t_arrlst	*arglst;
-}				t_token_arg_group;
-
-typedef struct	s_token_io_file
-{
-	int		open_mode;
-	char	*path;
-}				t_token_io_file;
-
 t_token			*token_create(int kind, void *value);
 void			token_destroy(t_token *tok, int sub_free);
 void			token_destroy_sub(t_token *tok);
 
-t_token			*token_create_arg_group(t_arrlst *arglst, int auto_free);
-void			token_destroy_arg_group(t_token_arg_group *tok_arg);
+t_token			*token_create_string(char *string);
 
-t_token			*token_create_io_file(int kind, char *path);
-void			token_destroy_io_file(t_token_io_file *tok_io);
+t_token			*token_create_io(int kind);
 
 char			*utility_find_home_dir(void);
 
 # define EB_ERR_NO_NEXT 1
-# define EB_ERR_INVALID_NEXT 2
+# define EB_ERR_SYNTAX 2
 # define EB_ERR_EMPTY_NEXT 3
 # define EB_ERR_OPEN_FAIL 4
+# define EB_ERR_NO_NAME 5
 
 # define EB_ERR_NO_NEXT_T "No file after operator."
-# define EB_ERR_INVALID_NEXT_T "Invalid syntax combinaison."
+# define EB_ERR_SYNTAX_T "Invalid syntax."
 # define EB_ERR_EMPTY_NEXT_T "File name empty."
+# define EB_ERR_NO_NAME_T "No name speficied."
 
 typedef struct	s_process
 {
@@ -245,19 +232,16 @@ typedef struct	s_process
 	int			is_dir;
 	t_arrlst	*arglst;
 	int			in_fd;
-	char		*in_file;
-	int			in_errno;
 	int			out_fd;
-	char		*out_file;
-	int			out_errno;
+	char		*err_file;
 	int			b_err;
 	pid_t		pid;
 }				t_process;
 
 int				process_find_path(t_process *process);
 void			process_execute(t_process *process);
-void			executor_builder(t_arrlst *toklst, t_arrlst *processlst);
 
 void			process_destroy(t_process *process);
+int				process_destroy2(t_process *process, int ret);
 
 #endif

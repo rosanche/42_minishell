@@ -17,7 +17,7 @@ void
 {
 	char *exec_name;
 
+	g_shell = shell;
 	exec_name = ft_strrchr(name, '/');
 	shell->name = exec_name == NULL ? name : exec_name + 1;
-	shell->pidlst = arraylist_create(20, NULL);
 }

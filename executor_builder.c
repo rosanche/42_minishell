@@ -22,86 +22,90 @@ static t_process
 	ft_memset(process, 0, sizeof(t_process));
 	process->in_fd = -1;
 	process->out_fd = -1;
+	process->arglst = arraylist_create(10, NULL);
 	return (process);
 }
 
-static void
-	builder_io(t_process *process, t_arrlst *toklst, size_t *index)
+static t_token
+	*n_tok(t_arrlst *toklst, size_t *index, int increment)
 {
 	t_token		*tok;
-	t_token		*next;
 
 	tok = toklst->items[*index];
-	if (!(process->b_err = toklst->size - *index == 1 ? EB_ERR_NO_NEXT : 0))
-	{
-		next = toklst->items[*index + 1];
-		executor_builder_io_set(process, tok, next);
-		*index += 1;
-	}
+	*index += increment;
+	return (tok);
 }
 
-static t_process
-	*single(t_arrlst *toklst, size_t *index)
+static int
+	builder_io(t_process *process, t_arrlst *toklst, size_t *index)
 {
-	t_process	*process;
-	t_token		*tok;
-	int			kind;
+	t_token			*tok;
+	t_token			*next;
+	int				*fd;
 
-	if (*index >= toklst->size || !(process = new()))
-		return (NULL);
-	if (!(process->arglst = arraylist_create(10, NULL)))
+	tok = toklst->items[*index - 2];
+	next = toklst->items[*index - 1];
+	fd = tok->kind == TOKEN_KIND_INPUT ? &(process->in_fd) : &(process->out_fd);
+	if (*fd != -1)
+		close(*fd);
+	*fd = open((char *)next->value, (int)(0 + tok->value), 0644);
+	return (*fd == -1);
+}
+
+static int
+	single(t_process **process_ptr, t_arrlst *processlst,
+			t_arrlst *lst, size_t *i)
+{
+	t_token			*tok;
+	t_token			*nxt;
+
+	if ((tok = lst->items[*i - 1])->kind == TOKEN_KIND_SEMICOLON)
+		return (-1);
+	if (tok->kind == TOKEN_KIND_PIPE)
 	{
-		free(process);
-		return (NULL);
+		if ((nxt = n_tok(lst, i, 0)) == NULL || nxt->kind != TOKEN_KIND_STRING)
+			return (EB_ERR_SYNTAX);
+		arraylist_add(processlst, *process_ptr);
+		*process_ptr = new();
+		return (-2);
 	}
+	else if (tok->kind == TOKEN_KIND_STRING)
+		arraylist_add((*process_ptr)->arglst, ft_strdup((char *)tok->value));
+	else if (token_is_io(tok->kind))
+	{
+		if ((nxt = n_tok(lst, i, 1)) == NULL || nxt->kind != TOKEN_KIND_STRING)
+			return (EB_ERR_NO_NEXT);
+		if (builder_io(*process_ptr, lst, i))
+			return (EB_ERR_OPEN_FAIL);
+	}
+	return (0);
+}
+
+int
+	executor_builder(size_t *index, t_arrlst *toklst, t_arrlst *processlst)
+{
+	t_token		*tok;
+	t_process	*process;
+	int			r;
+
+	process = new();
+	arraylist_grow(toklst, 1);
+	*index = 0;
 	while (*index < toklst->size)
 	{
 		tok = toklst->items[*index];
-//		ft_printf("kind %d\n", tok->kind);
-		if ((kind = tok->kind) == TOKEN_KIND_ARG_GROUP)
-			executor_builder_arg_add(process, tok);
-		else if (kind >= TOKEN_KIND_INPUT && kind <= TOKEN_KIND_APPEND)
-			builder_io(process, toklst, index);
-		else if (kind == TOKEN_KIND_PIPE)
-			break ;
-		if (process->b_err)
-			break ;
 		*index += 1;
-	}
-	return (process);
-}
-
-// cat < x > y
-// cat > x < y
-
-void
-	executor_builder(t_arrlst *toklst, t_arrlst *processlst)
-{
-	size_t		index;
-	t_process	*pr;
-
-	index = 0;
-	while (1)
-	{
-		if (!(pr = single(toklst, &index)))
+		if (tok == NULL)
 			break ;
-		if (pr->b_err != 0)
-		{
-			if (pr->b_err == EB_ERR_NO_NEXT)
-				minishell_error_simple(g_shell, EB_ERR_NO_NEXT_T);
-			else if (pr->b_err == EB_ERR_INVALID_NEXT)
-				minishell_error_simple(g_shell, EB_ERR_INVALID_NEXT_T);
-			else if (pr->b_err == EB_ERR_EMPTY_NEXT)
-				minishell_error_simple(g_shell, EB_ERR_EMPTY_NEXT_T);
-			else if (pr->b_err == EB_ERR_OPEN_FAIL)
-			{
-				if (pr->in_errno != 0)
-					minishell_error_file(g_shell, pr->in_file, pr->in_errno);
-				else if (pr->out_errno != 0)
-					minishell_error_file(g_shell, pr->out_file, pr->out_errno);
-			}
-		}
-		arraylist_add(processlst, pr);
-		index++;
+		r = single(&process, processlst, toklst, index);
+		if (r == -2)
+			continue ;
+		if ((process->arglst->size == 0 ? r = EB_ERR_NO_NAME : 0) || r == -1)
+			break ;
+		if (r > 0)
+			return (process_destroy2(process, r));
 	}
+	if (process != NULL)
+		arraylist_add(processlst, process);
+	return (0);
 }

@@ -55,35 +55,37 @@ static int
 }
 
 static inline int
-	kind(t_arrlst *chrlst, int kind)
+	kind(int used, int kind)
 {
-	return (chrlst->size != 0 ? TOKEN_KIND_ARG_GROUP : kind);
+	return (used ? TOKEN_KIND_STRING : kind);
 }
 
 int
 	eval_next(char *line, size_t *consumed, t_arrlst *chrlst)
 {
+	int		used;
+
+	used = 0;
 	while (*line)
 	{
-		if (commit(&line, consumed, chrlst, 0))
-			continue ;
-		else if (ft_iswspace(*line))
-			return (TOKEN_KIND_ARG_GROUP);
+		used |= commit(&line, consumed, chrlst, 0);
+		if (ft_iswspace(*line))
+			return (TOKEN_KIND_STRING);
 		else if (*line == '>' && *(line + 1) == '>')
-			return (kind(chrlst, TOKEN_KIND_APPEND));
+			return (kind(used, TOKEN_KIND_APPEND));
 		else if (*line == '<')
-			return (kind(chrlst, TOKEN_KIND_INPUT));
+			return (kind(used, TOKEN_KIND_INPUT));
 		else if (*line == '>')
-			return (kind(chrlst, TOKEN_KIND_OUTPUT));
+			return (kind(used, TOKEN_KIND_OUTPUT));
 		else if (*line == '|')
-			return (kind(chrlst, TOKEN_KIND_PIPE));
+			return (kind(used, TOKEN_KIND_PIPE));
 		else if (*line == ';')
-			return (kind(chrlst, TOKEN_KIND_SEMICOLON));
+			return (kind(used, TOKEN_KIND_SEMICOLON));
 		else
 		{
 			arg_builder_add_char(chrlst, *line, 0);
-			eval_consume(1, &line, consumed, 0);
+			used |= eval_consume(1, &line, consumed, 1);
 		}
 	}
-	return (0);
+	return (kind(used, 0));
 }
