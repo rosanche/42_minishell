@@ -32,8 +32,8 @@
 # define ENV_FILE_PATH "env.txt"
 # define BUILTIN_COUNT 7
 
-# define DISPLAY_LOADED_VARS 1
-# define INTERRUPT_DOES_EXIT 1
+# define DISPLAY_LOADED_VARS 0
+# define INTERRUPT_DOES_EXIT 0
 
 # define BIN_ECHO "echo"
 # define BIN_CD "cd"

@@ -58,7 +58,6 @@ static void
 		index = 0;
 		while (index < size)
 		{
-//			ft_printf("TRYING: %s\n", paths[index]);
 			if (try_path(paths[index], process, 1))
 				return ;
 			index++;
@@ -74,6 +73,5 @@ int
 	paths = ft_split(env_get_by_name("PATH")->value, ':');
 	search(process, paths);
 	ft_split_free(&paths);
-//	ft_printf("PATH: %s\n", process->filepath);
 	return (process->filepath != NULL);
 }

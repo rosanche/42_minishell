@@ -44,7 +44,6 @@ static int
 			break ;
 		}
 	}
-	process_print_struct_arrlst(processlst);
 	process_execute_list(processlst);
 	arraylist_clear(processlst, &process_destroy);
 	return (err);
