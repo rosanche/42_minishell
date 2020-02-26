@@ -54,6 +54,8 @@ static void
 	}
 	else
 	{
+		if (!paths)
+			return ;
 		size = ft_split_length(paths);
 		index = 0;
 		while (index < size)
@@ -68,9 +70,12 @@ static void
 int
 	process_find_path(t_process *process)
 {
-	char	**paths;
+	char		**paths;
+	t_env_var	*var;
 
-	paths = ft_split(env_get_by_name("PATH")->value, ':');
+	paths = NULL;
+	if ((var = env_get_by_name("PATH")) != NULL)
+		paths = ft_split(var->value, ':');
 	search(process, paths);
 	ft_split_free(&paths);
 	return (process->filepath != NULL);

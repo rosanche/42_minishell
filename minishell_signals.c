@@ -19,7 +19,5 @@ int
 		return (0);
 	if (signal(SIGQUIT, &signal_handler_quit) == SIG_ERR)
 		return (0);
-	if (signal(SIGCHLD, SIG_IGN) == SIG_ERR)
-		return (0);
 	return (1);
 }

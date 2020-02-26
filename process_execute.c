@@ -31,7 +31,6 @@ static void
 {
 	char **argv;
 
-	g_shell->last_pid = process->pid;
 	argv = (char **)process->arglst->items;
 	if (execve(process->filepath, argv, env_array_get()) == -1)
 	{
@@ -79,7 +78,10 @@ void
 		{
 			pipe(p);
 			if ((process->pid = fork()))
+			{
+				g_shell->last_pid = process->pid;
 				wait_pid(p, &fd_in);
+			}
 			else
 				child(process, fd_in, index < processlst->size, p);
 		}

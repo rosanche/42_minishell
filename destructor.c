@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-__attribute__ ((destructor))
-void
-	destructor()
-{
-//	 while (1);
-}
+//__attribute__ ((destructor))
+//void
+//	destructor()
+//{
+////	 while (1);
+//}

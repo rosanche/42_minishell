@@ -19,7 +19,6 @@ void
 {
 	signal(SIGQUIT, SIG_IGN);
 	g_signal_quit = 1;
-	ft_printf("signal_handler_quit\n", sig);
 	if (g_shell->last_pid != 0)
 	{
 		ft_printf("Quit: %d\n", sig);
