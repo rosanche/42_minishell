@@ -13,13 +13,13 @@
 #include "minishell.h"
 
 static void
-	wait_pid(int p[], int *fd_in)
+	wait_pid(t_process *process, int p[], int *fd_in)
 {
 	int status;
 
+	g_shell->last_pid = process->pid;
 	status = 0;
 	wait(&status);
-	g_shell->last_pid = 0;
 	if (WIFEXITED(status))
 		g_shell->last_code = WEXITSTATUS(status);
 	close(p[1]);
@@ -51,7 +51,7 @@ static void
 	dup2(fd_out, OUT);
 	close(p[0]);
 	if (minishell_evaluate_builtin(process, 0))
-		exit(EXIT_SUCCESS);
+		exit(g_shell->last_code);
 	else if (process_find_path(process))
 		execute(process);
 	else
@@ -60,20 +60,16 @@ static void
 }
 
 static void
-	sensitive_child(t_process *process, int fd_in, int has_more, int p[2])
+	sensitive_child(t_process *process, int has_more, int p[2])
 {
 	int		fd_out;
 	int		old_fd[2];
 
-	old_fd[0] = dup(IN);
 	old_fd[1] = dup(OUT);
 	fd_out = has_more ? p[1] : OUT;
 	fd_out = process->out_fd == -1 ? fd_out : process->out_fd;
-	dup2(fd_in, IN);
 	dup2(fd_out, OUT);
-	close(p[0]);
 	minishell_evaluate_builtin(process, 1);
-	dup2(old_fd[0], IN);
 	dup2(old_fd[1], OUT);
 }
 
@@ -89,6 +85,7 @@ void
 	fd_in = 0;
 	while (index < processlst->size)
 	{
+		g_shell->last_code = 0;
 		process = (t_process *)processlst->items[index];
 		fd_in = process->in_fd == -1 ? fd_in : process->in_fd;
 		index++;
@@ -96,12 +93,9 @@ void
 		{
 			pipe(p);
 			if ((process->sentitive = buildin_test_sensitive(process)))
-				sensitive_child(process, fd_in, index < processlst->size, p);
+				sensitive_child(process, index < processlst->size, p);
 			if ((process->pid = fork()))
-			{
-				g_shell->last_pid = process->pid;
-				wait_pid(p, &fd_in);
-			}
+				wait_pid(process, p, &fd_in);
 			else
 				child(process, fd_in, index < processlst->size, p);
 		}

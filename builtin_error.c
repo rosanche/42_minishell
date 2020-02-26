@@ -28,11 +28,13 @@ void
 		ft_dprintf(param.fd_err, "%s: %s: %s: %s\n",
 					shell->name, param.name, arg, error);
 	}
+	shell->last_code = 1;
 }
 
 void
 	builtin_errno(t_mshell *shell, t_builtin_param param, char *arg)
 {
 	builtin_error(shell, param, arg, strerror(errno));
+	shell->last_code = errno;
 	errno = 0;
 }
