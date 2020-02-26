@@ -18,7 +18,7 @@ static int
 	if (kind == TOKEN_KIND_INPUT)
 		return (O_RDONLY);
 	if (kind == TOKEN_KIND_OUTPUT)
-		return (O_WRONLY | O_CREAT);
+		return (O_WRONLY | O_TRUNC | O_CREAT);
 	if (kind == TOKEN_KIND_APPEND)
 		return (O_WRONLY | O_APPEND | O_CREAT);
 	return (-1);
