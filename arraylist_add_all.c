@@ -18,7 +18,7 @@ int
 	size_t	index;
 
 	if (dstlst == NULL || srclst == NULL || dstlst->items == NULL
-			|| srclst->size == NULL || !arraylist_grow(dstlst, srclst->size))
+			|| srclst->size == 0 || !arraylist_grow(dstlst, srclst->size))
 		return (0);
 	index = 0;
 	while (index < srclst->size)
