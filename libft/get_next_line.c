@@ -97,7 +97,7 @@ int
 			return (GNL_ERROR);
 		if (i_gnl_handle(holder, line))
 		{
-			if (holder->byte_read == 0 || holder->reached)
+			if (holder->reached)
 				return (i_gnl_initialize(holder, 1, GNL_END_REACHED));
 			return (GNL_READ);
 		}
