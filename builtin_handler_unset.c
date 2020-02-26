@@ -13,9 +13,9 @@
 #include "minishell.h"
 
 void
-	builtin_handler_unset(t_mshell *shell, t_builtin_param param)
+	builtin_handler_unset(t_builtin_param param)
 {
-	size_t	index;
+	int		index;
 	char	*line;
 
 	index = 1;
@@ -23,7 +23,7 @@ void
 	{
 		line = param.argv[index];
 		if (!env_var_is_name_valid(line, 0))
-			builtin_error(shell, param, line, ERR_NOT_VALID_ID);
+			builtin_error(g_shell, param, line, ERR_NOT_VALID_ID);
 		else
 			env_unset_from_name(line);
 		index++;

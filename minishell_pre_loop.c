@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	minishell_pre_loop(t_mshell *shell)
+	minishell_pre_loop(void)
 {
 	int	count;
 

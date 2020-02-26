@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	builtin_handler_cd(t_mshell *shell, t_builtin_param param)
+	builtin_handler_cd(t_builtin_param param)
 {
 	char	*path;
 
@@ -22,7 +22,7 @@ void
 	else
 		path = param.argv[1];
 	if (chdir(path) == -1)
-		builtin_errno(shell, param, path);
+		builtin_errno(g_shell, param, path);
 	if (param.argc == 1)
 		free(path);
 }

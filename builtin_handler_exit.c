@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	builtin_handler_exit(t_mshell *shell, t_builtin_param param)
+	builtin_handler_exit(t_builtin_param param)
 {
 	char	code;
 
@@ -25,14 +25,14 @@ void
 		{
 			code = (char)ft_atoi(param.argv[1]);
 			if (param.argc > 2)
-				builtin_error(shell, param, NULL, ERR_TOO_MANY_ARGS);
+				builtin_error(g_shell, param, NULL, ERR_TOO_MANY_ARGS);
 			else
-				minishell_exit(shell, code);
+				minishell_exit(code);
 		}
 		else
 		{
-			builtin_error(shell, param, param.argv[1], ERR_NUM_ARG_REQ);
-			minishell_exit(shell, (char)255);
+			builtin_error(g_shell, param, param.argv[1], ERR_NUM_ARG_REQ);
+			minishell_exit(255);
 		}
 	}
 }

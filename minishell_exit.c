@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 void
-	minishell_exit(t_mshell *shell, char code)
+	minishell_exit(int code)
 {
 	env_array_invalidate();
 	env_finalize();

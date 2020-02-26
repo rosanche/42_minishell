@@ -17,10 +17,12 @@ int
 {
 	t_mshell	shell;
 
+	ft_fake_use(&argc);
+	ft_fake_use(&argv);
 	minishell_signals_attach();
 	env_initialize(envp);
 	minishell_initialize(&shell, argv[0]);
-	minishell_pre_loop(&shell);
+	minishell_pre_loop();
 	minishell_input_loop(&shell);
 	return (EXIT_SUCCESS);
 }

@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 int
-	minishell_evaluate_builtin(t_mshell *shell, t_process *process)
+	minishell_evaluate_builtin(t_process *process)
 {
 	t_builtin	*builtin;
 	t_arrlst	*arglst;
@@ -26,7 +26,7 @@ int
 	if (builtin)
 	{
 		out = process->out_fd == -1 ? OUT : process->out_fd;
-		(*(builtin->handler))(shell, (t_builtin_param) {
+		(*(builtin->handler))((t_builtin_param) {
 			process->name, arglst->size - 1, (char **)(arglst->items), out, ERR
 		});
 		return (1);

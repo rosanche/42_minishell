@@ -50,7 +50,7 @@ static void
 	dup2(fd_in, IN);
 	dup2(fd_out, OUT);
 	close(p[0]);
-	if (minishell_evaluate_builtin(g_shell, process))
+	if (minishell_evaluate_builtin(process))
 		exit(EXIT_SUCCESS);
 	else if (process_find_path(process))
 		execute(process);

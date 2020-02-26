@@ -26,7 +26,7 @@ static int
 }
 
 static int
-	consume_env_var(char *line, size_t *consumed, t_arrlst *chrlst, int len)
+	consume_env_var(char *line, size_t *consumed, t_arrlst *chrlst, size_t len)
 {
 	size_t		index;
 	t_env_var	*var;
@@ -52,11 +52,11 @@ static int
 int
 	eval_env_var(char *line, size_t *consumed, t_arrlst *chrlst)
 {
-	int		len;
+	size_t		len;
 
 	if (*line != '$')
 		return (0);
-	len = env_var_is_name_valid_len(line + 1, 0);
+	len = 0 + env_var_is_name_valid_len(line + 1, 0);
 	eval_consume(1, &line, consumed, 0);
 	if (len == 0)
 	{

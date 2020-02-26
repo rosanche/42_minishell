@@ -70,7 +70,7 @@ typedef struct	s_builtin_param
 	int		fd_err;
 }				t_builtin_param;
 
-typedef void	(*t_builtin_handler)(t_mshell *, t_builtin_param);
+typedef void	(*t_builtin_handler)(t_builtin_param);
 
 typedef struct	s_builtin
 {
@@ -85,14 +85,14 @@ t_builtin		g_builtin[BUILTIN_COUNT];
 t_mshell		*g_shell;
 
 void			minishell_initialize(t_mshell *shell, char *name);
-void			minishell_pre_loop(t_mshell *shell);
+void			minishell_pre_loop(void);
 void			minishell_input_loop(t_mshell *shell);
 
 void			minishell_evaluate(t_mshell *shell, char *line);
 void			minishell_evaluate_argument(t_arrlst *arglst, char *line);
 
 void			minishell_error(t_mshell *shell, char *exec, char *error);
-void			minishell_exit(t_mshell *shell, char code);
+void			minishell_exit(int code);
 
 void			minishell_prompt_ask(t_mshell *shell, int with_new_line);
 
@@ -101,13 +101,13 @@ t_builtin		*builtin_match(char *name);
 void			builtin_error(t_mshell *s, t_builtin_param p, char *a, char *e);
 void			builtin_errno(t_mshell *s, t_builtin_param p, char *a);
 
-void			builtin_handler_echo(t_mshell *shell, t_builtin_param param);
-void			builtin_handler_cd(t_mshell *shell, t_builtin_param param);
-void			builtin_handler_pwd(t_mshell *shell, t_builtin_param param);
-void			builtin_handler_export(t_mshell *shell, t_builtin_param param);
-void			builtin_handler_unset(t_mshell *shell, t_builtin_param param);
-void			builtin_handler_env(t_mshell *shell, t_builtin_param param);
-void			builtin_handler_exit(t_mshell *shell, t_builtin_param param);
+void			builtin_handler_echo(t_builtin_param param);
+void			builtin_handler_cd(t_builtin_param param);
+void			builtin_handler_pwd(t_builtin_param param);
+void			builtin_handler_export(t_builtin_param param);
+void			builtin_handler_unset(t_builtin_param param);
+void			builtin_handler_env(t_builtin_param param);
+void			builtin_handler_exit(t_builtin_param param);
 
 typedef struct	s_env_var
 {
@@ -243,7 +243,7 @@ void			process_execute(t_process *process);
 
 void			process_destroy(t_process *process);
 int				process_destroy2(t_process *process, int ret);
-int				minishell_evaluate_builtin(t_mshell *shell, t_process *process);
+int				minishell_evaluate_builtin(t_process *process);
 int				token_is_io(int kind);
 void			minishell_process_kill(t_mshell *shell, int sig);
 int				eval_tokens(t_arrlst *tokenlst, char *line, size_t *consumed);

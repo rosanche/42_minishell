@@ -33,7 +33,7 @@ t_token
 	open_mode = kind_to_open_mode(kind);
 	if (open_mode == -1)
 		return (NULL);
-	return (tok = token_create(kind, (void *)0 + open_mode));
+	return (tok = token_create(kind, (void *)((long)0 + open_mode)));
 }
 
 int

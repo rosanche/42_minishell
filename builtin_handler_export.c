@@ -13,13 +13,13 @@
 #include "minishell.h"
 
 void
-	builtin_handler_export(t_mshell *shell, t_builtin_param param)
+	builtin_handler_export(t_builtin_param param)
 {
-	size_t	index;
+	int		index;
 	char	*line;
 
 	if (param.argc == 1)
-		builtin_handler_env(shell, param);
+		builtin_handler_env(param);
 	else
 	{
 		index = 1;
@@ -27,9 +27,12 @@ void
 		{
 			line = param.argv[index];
 			if (!env_var_is_name_valid(line, 1))
-				builtin_error(shell, param, line, ERR_NOT_VALID_ID);
+				builtin_error(g_shell, param, line, ERR_NOT_VALID_ID);
 			else
-				env_set_from_line(line);
+			{
+				ft_printf("EXPORTING %s %d\n", line, env_set_from_line(line));
+
+			}
 			index++;
 		}
 	}

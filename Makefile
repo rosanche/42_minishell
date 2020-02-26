@@ -55,7 +55,6 @@ SRCS =		argument_builder.c \
 			minishell.c \
 			minishell_error.c \
 			minishell_evaluator.c \
-			minishell_evaluator_argument.c \
 			minishell_evaluator_builtin.c \
 			minishell_exit.c \
 			minishell_initialize.c \
@@ -77,7 +76,7 @@ SRCS =		argument_builder.c \
 OBJ = $(SRCS:%.c=%.o)
 
 %.o: %.c
-	gcc -I $(INC) -c $< -o $@
+	gcc -I $(INC) $(FLAGS) -c $< -o $@
 
 all: $(NAME)
 

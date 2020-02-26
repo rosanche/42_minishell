@@ -15,7 +15,7 @@
 ssize_t
 	arraylist_index_of(t_arrlst *alst, void *ptr)
 {
-	ssize_t	index;
+	size_t	index;
 
 	if (alst == NULL || alst->items == NULL || alst->size == 0)
 		return (-2);
