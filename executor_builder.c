@@ -48,7 +48,7 @@ static int
 	fd = tok->kind == TOKEN_KIND_INPUT ? &(process->in_fd) : &(process->out_fd);
 	if (*fd != -1)
 		close(*fd);
-	*fd = open((char *)next->value, (int)(0 + tok->value), 0644);
+	*fd = open((char *)(next->value), (int)(0 + tok->value), 0644);
 	return (*fd == -1);
 }
 

@@ -16,5 +16,5 @@ __attribute__ ((destructor))
 void
 	destructor()
 {
-	// while (1);
+//	 while (1);
 }

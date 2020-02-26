@@ -60,7 +60,10 @@ static int
 	ret = executor_builder(&index, toklst, processlst);
 	tok = (t_token *)(toklst->items[index]);
 	if (ret == EB_ERR_OPEN_FAIL)
-		shell_error_file(g_shell, tok->value, errno);
+	{
+		shell_error_file(g_shell, tok != NULL &&
+			tok->kind == TOKEN_KIND_STRING ? tok->value : "", errno);
+	}
 	else if (ret != 0)
 	{
 		minishell_error_simple(g_shell, (char *[]){
