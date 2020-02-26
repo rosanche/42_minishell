@@ -26,3 +26,18 @@ t_builtin
 	}
 	return (NULL);
 }
+
+int
+	buildin_test_sensitive(t_process *process)
+{
+	char		*name;
+	t_builtin	*builtin;
+
+	name = process->arglst->items[0];
+	if (name == NULL)
+		return (0);
+	builtin = builtin_match(name);
+	if (builtin == NULL)
+		return (0);
+	return (builtin->sensitive);
+}

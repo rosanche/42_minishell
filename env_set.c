@@ -30,6 +30,6 @@ void
 	if (var == NULL)
 		return ;
 	env_unset_from_name(var->name);
-	ft_printf("ADDED ? %d\n", arraylist_add(&g_env_variables, var));
+	arraylist_add(&g_env_variables, var);
 	env_array_invalidate();
 }

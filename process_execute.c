@@ -50,13 +50,31 @@ static void
 	dup2(fd_in, IN);
 	dup2(fd_out, OUT);
 	close(p[0]);
-	if (minishell_evaluate_builtin(process))
+	if (minishell_evaluate_builtin(process, 0))
 		exit(EXIT_SUCCESS);
 	else if (process_find_path(process))
 		execute(process);
 	else
 		minishell_error(g_shell, process->name, ERR_CMD_NOT_FOUND);
 	exit(EXIT_FAILURE);
+}
+
+static void
+	sensitive_child(t_process *process, int fd_in, int has_more, int p[2])
+{
+	int		fd_out;
+	int		old_fd[2];
+
+	old_fd[0] = dup(IN);
+	old_fd[1] = dup(OUT);
+	fd_out = has_more ? p[1] : OUT;
+	fd_out = process->out_fd == -1 ? fd_out : process->out_fd;
+	dup2(fd_in, IN);
+	dup2(fd_out, OUT);
+	close(p[0]);
+	minishell_evaluate_builtin(process, 1);
+	dup2(old_fd[0], IN);
+	dup2(old_fd[1], OUT);
 }
 
 void
@@ -71,12 +89,14 @@ void
 	fd_in = 0;
 	while (index < processlst->size)
 	{
-		process = (t_process*)processlst->items[index];
+		process = (t_process *)processlst->items[index];
 		fd_in = process->in_fd == -1 ? fd_in : process->in_fd;
 		index++;
 		if (process->b_err == 0)
 		{
 			pipe(p);
+			if ((process->sentitive = buildin_test_sensitive(process)))
+				sensitive_child(process, fd_in, index < processlst->size, p);
 			if ((process->pid = fork()))
 			{
 				g_shell->last_pid = process->pid;

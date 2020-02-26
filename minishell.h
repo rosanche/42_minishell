@@ -76,6 +76,7 @@ typedef struct	s_builtin
 {
 	t_builtin_handler	handler;
 	char				*name;
+	int					sensitive;
 }				t_builtin;
 
 int				g_flag_in_read;
@@ -236,6 +237,7 @@ typedef struct	s_process
 	char		*err_file;
 	int			b_err;
 	pid_t		pid;
+	int			sentitive;
 }				t_process;
 
 int				process_find_path(t_process *process);
@@ -243,7 +245,7 @@ void			process_execute(t_process *process);
 
 void			process_destroy(t_process *process);
 int				process_destroy2(t_process *process, int ret);
-int				minishell_evaluate_builtin(t_process *process);
+int				minishell_evaluate_builtin(t_process *process, int sensitive_mode);
 int				token_is_io(int kind);
 void			minishell_process_kill(t_mshell *shell, int sig);
 int				eval_tokens(t_arrlst *tokenlst, char *line, size_t *consumed);
@@ -251,5 +253,7 @@ void			minishell_error_simple(t_mshell *shell, char *error);
 void			process_execute_list(t_arrlst *processlst);
 int				executor_builder(size_t *index, t_arrlst *toklst, t_arrlst *processlst);
 void			shell_error_file(t_mshell *shell, char *file, int err_no);
+
+int				buildin_test_sensitive(t_process *process);
 
 #endif

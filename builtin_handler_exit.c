@@ -18,7 +18,7 @@ void
 	char	code;
 
 	if (param.argc == 1)
-		code = 0;
+		minishell_exit(0);
 	else
 	{
 		if (ft_str_isdigit(param.argv[1], 1, 1))

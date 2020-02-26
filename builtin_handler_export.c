@@ -29,10 +29,7 @@ void
 			if (!env_var_is_name_valid(line, 1))
 				builtin_error(g_shell, param, line, ERR_NOT_VALID_ID);
 			else
-			{
-				ft_printf("EXPORTING %s %d\n", line, env_set_from_line(line));
-
-			}
+				env_set_from_line(line);
 			index++;
 		}
 	}

@@ -15,12 +15,12 @@
 void
 	env_finalize(void)
 {
-	size_t	index;
+	size_t		index;
 
 	index = 0;
 	while (index < g_env_variables.size)
 	{
-		env_var_free_and_release(g_env_variables.items[index]);
+		env_var_free_and_release((t_env_var **)&(g_env_variables.items[index]));
 		index++;
 	}
 	arraylist_destroy_items(&g_env_variables);
