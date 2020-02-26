@@ -59,7 +59,7 @@ static t_token
 	return (tok);
 }
 
-void
+int
 	eval_tokens(t_arrlst *tokenlst, char *line, size_t *consumed)
 {
 	t_token		*tok;
@@ -79,4 +79,5 @@ void
 				break ;
 		}
 	}
+	return (1);
 }

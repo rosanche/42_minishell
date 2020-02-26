@@ -51,11 +51,7 @@ SRCS = argument_builder.c \
 		evaluator_tilde.c \
 		evaluator_token.c \
 		evaluator_utilities.c \
-		exec.c \
 		executor_builder.c \
-		executor_builder_args.c \
-		executor_builder_io.c \
-		flags.c \
 		main.c \
 		minishell.c \
 		minishell_error.c \
@@ -74,7 +70,6 @@ SRCS = argument_builder.c \
 		process_file_finder.c \
 		signal_handler_interrupt.c \
 		signal_handler_quit.c \
-		test.c \
 		token.c \
 		token_arg_group.c \
 		token_io_file.c \
