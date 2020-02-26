@@ -58,9 +58,9 @@ static int
 
 	index = 0;
 	ret = executor_builder(&index, toklst, processlst);
-	tok = (t_token *)(toklst->items[index]);
 	if (ret == EB_ERR_OPEN_FAIL)
 	{
+		tok = (t_token *)(toklst->items[index == 0 ? 0 : index - 1]);
 		shell_error_file(g_shell, tok != NULL &&
 			tok->kind == TOKEN_KIND_STRING ? tok->value : "", errno);
 	}
