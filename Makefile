@@ -96,4 +96,8 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all makelib clean fclean re
+norm:
+	norminette *.[ch]
+	norminette */*.[ch]
+
+.PHONY: all makelib clean fclean re norm
