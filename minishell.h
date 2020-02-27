@@ -79,8 +79,6 @@ typedef struct	s_builtin
 	int					sensitive;
 }				t_builtin;
 
-int				g_flag_in_read;
-
 t_builtin		g_builtin[BUILTIN_COUNT];
 
 t_mshell		*g_shell;

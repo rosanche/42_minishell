@@ -23,9 +23,7 @@ void
 	while (1)
 	{
 		minishell_prompt_ask(shell, 0);
-		g_flag_in_read = 1;
 		ret = get_next_line(IN, &line);
-		g_flag_in_read = 0;
 		if (line != NULL && ft_strlen(line) != 0)
 			minishell_evaluate(shell, line);
 		free(line);
