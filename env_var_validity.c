@@ -17,7 +17,7 @@
 */
 
 int
-	env_var_is_name_valid(char *name, int allow_equal)
+	env_var_is_name_valid(char *name, int allow_eq)
 {
 	if (name == NULL)
 		return (0);
@@ -26,7 +26,7 @@ int
 	name++;
 	while (*name)
 	{
-		if (allow_equal && (*name == '=' || (*name == '+' && *name == '=')))
+		if (allow_eq && (*name == '=' || (*name == '+' && *(name + 1) == '=')))
 			break ;
 		if (!ft_isalnum(*name) && !ft_isdigit(*name) && *name != '_')
 			return (0);

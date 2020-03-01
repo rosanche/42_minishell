@@ -18,9 +18,7 @@ t_env_var
 	char	*equal;
 
 	equal = ft_strchr(line, '=');
-	if (equal == NULL)
-		equal = NULL;
-	else
+	if (equal != NULL)
 	{
 		equal[0] = '\0';
 		equal++;

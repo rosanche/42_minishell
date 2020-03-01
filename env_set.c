@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void
+t_env_var
 	*env_set_from_line(char *line, int replace)
 {
 	t_env_var	*var;

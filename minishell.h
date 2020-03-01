@@ -97,7 +97,8 @@ void			minishell_evaluate_argument(t_arrlst *arglst, char *line);
 void			minishell_error(t_mshell *shell, char *exec, char *error);
 void			minishell_exit(int code);
 
-void			minishell_prompt_ask(t_mshell *shell, int with_new_line);
+void			minishell_prompt_clear_last(void);
+void			minishell_prompt_ask(t_mshell *shell, int with_nl);
 
 t_builtin		*builtin_match(char *name);
 
@@ -130,8 +131,11 @@ t_env_var		*env_var_create(char *name, char *value);
 int				env_var_is_name_valid(char *name, int allow_equal);
 int				env_var_is_name_valid_len(char *name);
 
-void			*env_set_from_line(char *line, int replace);
+t_env_var		*env_set_from_line(char *line, int replace);
 void			env_set(t_env_var *var);
+
+t_env_var		*env_append_from_line(char *line);
+void			env_append(t_env_var *var, char *str);
 
 void			env_unset_from_name(char *name);
 

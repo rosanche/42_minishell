@@ -51,6 +51,20 @@ static void
 	}
 }
 
+static void
+	builtin_handler_export_print_handle(char *line)
+{
+	char		*plus;
+	char		*equal;
+
+	plus = ft_strchr(line, '+');
+	equal = ft_strchr(line, '=');
+	if (equal != NULL && plus != NULL && plus + 1 == equal)
+		env_append_from_line(line);
+	else
+		env_set_from_line(line, equal != NULL);
+}
+
 void
 	builtin_handler_export(t_builtin_param param)
 {
@@ -68,7 +82,7 @@ void
 			if (!env_var_is_name_valid(line, 1))
 				builtin_error(g_shell, param, line, ERR_NOT_VALID_ID);
 			else
-				env_set_from_line(line, 0);
+				builtin_handler_export_print_handle(line);
 			index++;
 		}
 	}
