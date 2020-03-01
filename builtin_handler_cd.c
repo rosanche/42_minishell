@@ -18,7 +18,14 @@ void
 	char	*path;
 
 	if (param.argc == 1)
-		path = utility_find_home_dir();
+	{
+		path = home_get_from_env();
+		if (path == NULL)
+		{
+			builtin_error(g_shell, param, NULL, ERR_HOME_NOT_SET);
+			return ;
+		}
+	}
 	else
 		path = param.argv[1];
 	if (chdir(path) == -1)

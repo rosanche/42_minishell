@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utility_find_home.c                                :+:      :+:    :+:   */
+/*   home_cache.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 18:58:35 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/20 18:58:35 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/03/01 18:07:16 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/03/01 18:07:16 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char
-	*utility_find_home_dir(void)
-{
-	t_env_var	*var;
+char	*g_home = NULL;
 
-	var = env_get_by_name("HOME");
-	if (var != NULL)
-		return (ft_strdup(var->value));
-	var = env_get_by_name("USER");
-	if (var == NULL)
-		var = env_get_by_name("LOGNAME");
-	if (var != NULL)
-		return (ft_strjoin(BASE_HOME_DIRECTORY, var->value));
-	return (ft_strdup("~"));
+void
+	home_set_cache(char *value)
+{
+	char	*dup;
+
+	if (value == NULL || !(dup = ft_strdup(value)))
+		return ;
+	if (g_home != NULL)
+		free(g_home);
+	g_home = dup;
+}
+
+char
+	*home_get_cache(void)
+{
+	return (ft_strdup(g_home));
 }

@@ -48,6 +48,7 @@
 # define ERR_NUM_ARG_REQ "numeric argument required"
 # define ERR_NOT_VALID_ID "not a valid identifier"
 # define ERR_UNEXPECTED "unexpected syntax"
+# define ERR_HOME_NOT_SET "HOME not set"
 # define ERR_FORK_FAILED "failed to fork()"
 
 # define INVALID 1
@@ -127,9 +128,9 @@ t_env_var		*env_var_create_from_line(char *line);
 t_env_var		*env_var_create(char *name, char *value);
 
 int				env_var_is_name_valid(char *name, int allow_equal);
-int				env_var_is_name_valid_len(char *name, int allow_equal);
+int				env_var_is_name_valid_len(char *name);
 
-int				env_set_from_line(char *line);
+void			*env_set_from_line(char *line, int replace);
 void			env_set(t_env_var *var);
 
 void			env_unset_from_name(char *name);
@@ -213,7 +214,7 @@ t_token			*token_create_string(char *string);
 
 t_token			*token_create_io(int kind);
 
-char			*utility_find_home_dir(void);
+char			*home_get_from_env(void);
 
 # define EB_ERR_NO_NEXT 1
 # define EB_ERR_SYNTAX 2
@@ -257,5 +258,9 @@ int				executor_builder(size_t *index, t_arrlst *toklst,
 void			shell_error_file(t_mshell *shell, char *file, int err_no);
 
 int				buildin_test_sensitive(t_process *process);
+
+char			*g_home;
+void			home_set_cache(char *value);
+char			*home_get_cache(void);
 
 #endif

@@ -1,28 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_loader.c                                       :+:      :+:    :+:   */
+/*   utility_find_home.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 19:02:20 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 19:02:20 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 18:58:35 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 18:58:35 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int
-	env_load(char **envp)
+char
+	*home_get_from_env(void)
 {
-	size_t	index;
-	char	*line;
+	t_env_var	*var;
 
-	index = 0;
-	while ((line = envp[index]) != NULL)
-	{
-		env_set_from_line(line, 1);
-		index++;
-	}
-	return (1);
+	var = env_get_by_name("HOME");
+	if (var != NULL && var->name != NULL)
+		return (ft_strdup(var->value));
+	return (NULL);
 }

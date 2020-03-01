@@ -26,7 +26,7 @@ int
 	name++;
 	while (*name)
 	{
-		if (allow_equal && *name == '=')
+		if (allow_equal && (*name == '=' || (*name == '+' && *name == '=')))
 			break ;
 		if (!ft_isalnum(*name) && !ft_isdigit(*name) && *name != '_')
 			return (0);
@@ -36,7 +36,7 @@ int
 }
 
 int
-	env_var_is_name_valid_len(char *name, int allow_equal)
+	env_var_is_name_valid_len(char *name)
 {
 	char	*start;
 
@@ -46,8 +46,6 @@ int
 		name++;
 		while (*name)
 		{
-			if (!allow_equal && *name == '=')
-				break ;
 			if (!ft_isalnum(*name) && !ft_isdigit(*name) && *name != '_')
 				break ;
 			name++;
