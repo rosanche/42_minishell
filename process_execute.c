@@ -100,4 +100,5 @@ void
 				child(process, fd_in, index < processlst->size, p);
 		}
 	}
+	g_shell->last_pid = 0;
 }
