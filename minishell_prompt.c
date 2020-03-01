@@ -13,6 +13,12 @@
 #include "minishell.h"
 
 void
+	minishell_prompt_clear_last(void)
+{
+	ft_putstr_fd("\b\b  \b\b", ERR);
+}
+
+void
 	minishell_prompt_ask(t_mshell *shell, int with_new_line)
 {
 	if (with_new_line)

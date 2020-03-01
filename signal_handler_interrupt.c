@@ -22,7 +22,10 @@ void
 	if (g_shell->last_pid != 0)
 		minishell_process_kill(g_shell, sig);
 	else
+	{
+		minishell_prompt_clear_last();
 		minishell_prompt_ask(g_shell, 1);
+	}
 	g_shell->last_code = sig;
 	if (INTERRUPT_DOES_EXIT)
 		exit(1);
