@@ -30,10 +30,10 @@ function do_test()
 {
 	file="$1"
 	
-	./minishell < "$file" 2>&1 | cat -e | sed -e 's/minishell\$ //g' &> $DIR/minishell_output
+	./minishell < "$file" 2>/dev/null | cat -e | head -n 1 &> $DIR/minishell_output
 	minishell_exit=$?
 	
-	bash < "$file" 2>&1 | cat -e &> $DIR/bash_output
+	bash < "$file" 2>/dev/null | cat -e &> $DIR/bash_output
 	bash_exit=$?
 	
 	diff $DIR/minishell_output $DIR/bash_output > $DIR/diff

@@ -15,6 +15,8 @@
 void
 	minishell_prompt_clear_last(void)
 {
+	free(g_saved);
+	g_saved = NULL;
 	ft_putstr_fd("\b\b  \b\b", ERR);
 }
 

@@ -267,4 +267,6 @@ char			*g_home;
 void			home_set_cache(char *value);
 char			*home_get_cache(void);
 
+char			*g_saved;
+
 #endif
