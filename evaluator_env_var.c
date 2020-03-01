@@ -56,8 +56,8 @@ int
 
 	if (*line != '$')
 		return (0);
-	len = 0 + env_var_is_name_valid_len(line + 1, 0);
 	eval_consume(1, &line, consumed, 0);
+	len = 0 + env_var_is_name_valid_len(line, 0);
 	if (len == 0)
 	{
 		if (*line == '?')

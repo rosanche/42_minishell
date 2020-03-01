@@ -54,6 +54,9 @@
 
 # define BASE_HOME_DIRECTORY "/Users/"
 
+# define Q_SINGLE '\''
+# define Q_DOUBLE '\"'
+
 typedef struct	s_minishell
 {
 	char		*name;
@@ -163,7 +166,6 @@ int				eval_q_single(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_q_double(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_tilde(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_env_var(char *line, size_t *consumed, t_arrlst *chrlst);
-int				eval_escape_backslash(char *seq, size_t *consumed);
 
 int				eval_consume(size_t sub, char **line, size_t *consumed, int r);
 
@@ -173,11 +175,11 @@ void			arg_builder_add_char(t_arrlst *chrlst, char chr, char quote);
 void			arg_builder_add_string(t_arrlst *chrlst, char *str, char quote);
 char			*arg_builder_build(t_arrlst *chrlst);
 
-int				g_argument_builder_debug;
+int				g_arg_builder_debug;
 
-void			argument_builder_debug(int state);
-void			argument_builder_debug_print_char(char chr, char quote);
-void			argument_builder_debug_new(void);
+void			arg_builder_debug(int state);
+void			arg_builder_debug_print_char(char chr, char quote);
+void			arg_builder_debug_new(void);
 
 int				minishell_signals_attach(void);
 

@@ -41,15 +41,15 @@ static int
 		else
 			return (eval_consume(1, line, consumed, 1));
 	}
-	else if (**line == '\'')
+	else if (**line == Q_SINGLE)
 	{
-		eval_q_single(*line + 1, &sub, chrlst);
-		return (eval_consume(sub + 1, line, consumed, 1));
+		eval_q_single(*line, &sub, chrlst);
+		return (eval_consume(sub, line, consumed, 1));
 	}
-	else if (**line == '\"')
+	else if (**line == Q_DOUBLE)
 	{
-		eval_q_double(*line + 1, &sub, chrlst);
-		return (eval_consume(sub + 1, line, consumed, 1));
+		eval_q_double(*line, &sub, chrlst);
+		return (eval_consume(sub, line, consumed, 1));
 	}
 	return (commit2(line, consumed, chrlst, sub));
 }
@@ -64,11 +64,13 @@ int
 	eval_next(char *line, size_t *consumed, t_arrlst *chrlst)
 {
 	int		used;
+	int		used_this_time;
 
 	used = 0;
 	while (*line)
 	{
-		used |= commit(&line, consumed, chrlst, 0);
+		used_this_time = commit(&line, consumed, chrlst, 0);
+		used |= used_this_time;
 		if (ft_iswspace(*line))
 			return (TOKEN_KIND_STRING);
 		else if (*line == '>' && *(line + 1) == '>')
@@ -81,7 +83,7 @@ int
 			return (kind(used, TOKEN_KIND_PIPE));
 		else if (*line == ';')
 			return (kind(used, TOKEN_KIND_SEMICOLON));
-		else
+		else if (!used_this_time)
 		{
 			arg_builder_add_char(chrlst, *line, 0);
 			used |= eval_consume(1, &line, consumed, 1);
