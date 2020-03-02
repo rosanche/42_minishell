@@ -33,11 +33,16 @@ static void
 {
 	size_t		index;
 	t_env_var	*var;
+	t_arrlst	*varlst;
 
+	if (!(varlst = arraylist_duplicate(&g_env_variables)))
+		varlst = &g_env_variables;
+	else
+		arraylist_sort(varlst, &env_compare_name);
 	index = 0;
-	while (index < g_env_variables.size)
+	while (index < varlst->size)
 	{
-		var = (t_env_var *)g_env_variables.items[index];
+		var = (t_env_var *)varlst->items[index];
 		ft_dprintf(param.fd_out, "declare -x %s", var->name);
 		if (var->value != NULL)
 		{
@@ -49,6 +54,8 @@ static void
 		ft_putchar_fd('\n', param.fd_out);
 		index++;
 	}
+	if (varlst != &g_env_variables)
+		arraylist_destroy(varlst);
 }
 
 static void

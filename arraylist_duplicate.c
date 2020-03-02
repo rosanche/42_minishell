@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_dump.c                                         :+:      :+:    :+:   */
+/*   arraylist_duplicate.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/19 10:53:30 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/19 10:53:30 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/19 13:33:19 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/19 13:33:19 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "arraylist.h"
 
-int
-	env_compare_by_name(t_env_var *item, char *to)
+t_arrlst
+	*arraylist_duplicate(t_arrlst *alst)
 {
-	if (item == NULL || to == NULL)
-		return (1);
-	return (ft_strcmp(item->name, to));
-}
+	t_arrlst	*dup;
 
-int
-	env_compare_name(t_env_var *a, t_env_var *b)
-{
-	if (a == NULL || b == NULL)
-		return (a != b);
-	return (ft_strcmp(a->name, b->name));
+	if (alst == NULL)
+		return (NULL);
+	if ((dup = arraylist_create(1, alst->cmp_method)))
+	{
+		arraylist_add_all(dup, alst);
+		dup->grow_factor = alst->grow_factor;
+	}
+	return (dup);
 }

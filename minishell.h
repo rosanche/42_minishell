@@ -149,6 +149,7 @@ void			env_finalize(void);
 void			env_dump_content(void);
 
 int				env_compare_by_name(t_env_var *item, char *to);
+int				env_compare_name(t_env_var *a, t_env_var *b);
 
 char			**env_array_get(void);
 void			env_array_build(void);
