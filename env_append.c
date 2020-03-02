@@ -47,4 +47,6 @@ void
 		var->value = ft_strdup(str);
 	else
 		var->value = ft_strjoin_free(var->value, str, FT_STRJOIN_FREE_FIRST);
+	if (ft_strcmp(var->name, "HOME") == 0)
+		home_set_cache(var->value);
 }

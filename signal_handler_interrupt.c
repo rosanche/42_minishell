@@ -20,10 +20,13 @@ void
 	signal(SIGINT, SIG_IGN);
 	g_signal_interrupt = 1;
 	if (g_shell->last_pid != 0)
+	{
+		ft_printf("\n");
 		minishell_process_kill(g_shell, sig);
+	}
 	else
 	{
-		minishell_prompt_clear_last();
+		minishell_prompt_clear_last(0);
 		minishell_prompt_ask(g_shell, 1);
 	}
 	g_shell->last_code = sig;

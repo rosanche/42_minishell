@@ -53,7 +53,12 @@ static void
 	if (minishell_evaluate_builtin(process, 0))
 		exit(g_shell->last_code);
 	else if (process_find_path(process))
-		execute(process);
+	{
+		if (process->is_dir)
+			minishell_error(g_shell, process->name, ERR_IS_DIR);
+		else
+			execute(process);
+	}
 	else
 		minishell_error(g_shell, process->name, ERR_CMD_NOT_FOUND);
 	exit(EXIT_FAILURE);

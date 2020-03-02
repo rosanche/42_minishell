@@ -29,5 +29,5 @@ void
 char
 	*home_get_cache(void)
 {
-	return (ft_strdup(g_home));
+	return (ft_strdup(g_home == NULL ? "" : g_home));
 }

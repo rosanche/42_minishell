@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   minishell_input.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -65,6 +65,7 @@ char
 		{
 			if (!*saved)
 				return (NULL);
+			ft_putchar_fd('\n', ERR);
 			line = *saved;
 			*saved = NULL;
 			return (line);

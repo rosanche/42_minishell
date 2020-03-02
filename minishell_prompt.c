@@ -13,11 +13,13 @@
 #include "minishell.h"
 
 void
-	minishell_prompt_clear_last(void)
+	minishell_prompt_clear_last(int with_new_line)
 {
 	free(g_saved);
 	g_saved = NULL;
 	ft_putstr_fd("\b\b  \b\b", ERR);
+	if (with_new_line)
+		ft_putchar_fd('\n', ERR);
 }
 
 void

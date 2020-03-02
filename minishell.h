@@ -44,6 +44,7 @@
 # define BIN_EXIT "exit"
 
 # define ERR_CMD_NOT_FOUND "command not found"
+# define ERR_IS_DIR "is a directory"
 # define ERR_TOO_MANY_ARGS "too many arguments"
 # define ERR_NUM_ARG_REQ "numeric argument required"
 # define ERR_NOT_VALID_ID "not a valid identifier"
@@ -97,7 +98,7 @@ void			minishell_evaluate_argument(t_arrlst *arglst, char *line);
 void			minishell_error(t_mshell *shell, char *exec, char *error);
 void			minishell_exit(int code);
 
-void			minishell_prompt_clear_last(void);
+void			minishell_prompt_clear_last(int with_new_line);
 void			minishell_prompt_ask(t_mshell *shell, int with_nl);
 
 t_builtin		*builtin_match(char *name);
