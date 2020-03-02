@@ -17,7 +17,7 @@ static void
 {
 	char	n;
 
-	if ((n = *(*line + 1) == Q_DOUBLE) || n == '\\' || n == '$')
+	if ((n = *(*line + 1)) == Q_DOUBLE || n == '\\' || n == '$')
 	{
 		arg_builder_add_char(chrlst, *(*line + 1), Q_DOUBLE);
 		eval_consume(1, line, consumed, 0);

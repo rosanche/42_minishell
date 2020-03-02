@@ -31,17 +31,14 @@ static int
 static int
 	commit(char **line, size_t *consumed, t_arrlst *chrlst, size_t sub)
 {
-	char	n;
-
 	if (**line == '\\')
 	{
-		if (ft_isquote(n = *(*line + 1)) || n == '\\' || n == '$' || n == '~')
+		if (*(*line + 1) != '\0')
 		{
 			arg_builder_add_char(chrlst, *(*line + 1), 0);
-			return (eval_consume(2, line, consumed, 1));
+			eval_consume(1, line, consumed, 1);
 		}
-		else
-			return (eval_consume(1, line, consumed, 1));
+		return (eval_consume(1, line, consumed, 1));
 	}
 	else if (**line == Q_SINGLE)
 	{
