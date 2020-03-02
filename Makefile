@@ -56,7 +56,7 @@ all: $(NAME)
 
 fclean: clean
 	@echo $(MAKE_PREFIX) "$(COLOR_WHITE)Removed target$(COLOR_RESET)"
-	@rm -f $(TARGET)
+	@rm -f $(NAME)
 
 clean:
 	@echo $(MAKE_PREFIX) "$(COLOR_WHITE)Removed objects$(COLOR_RESET)"
