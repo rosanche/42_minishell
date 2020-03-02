@@ -28,8 +28,9 @@ void
 	}
 	else
 		path = param.argv[1];
-	if (chdir(path) == -1)
-		builtin_errno(g_shell, param, path);
+	if (path != NULL && ft_strlen(path) != 0)
+		if (chdir(path) == -1)
+			builtin_errno(g_shell, param, path);
 	if (param.argc == 1)
 		free(path);
 }

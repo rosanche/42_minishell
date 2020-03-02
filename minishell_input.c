@@ -63,9 +63,9 @@ char
 			return (NULL);
 		if (avail == 0)
 		{
+			ft_putchar_fd('\n', ERR);
 			if (!*saved)
 				return (NULL);
-			ft_putchar_fd('\n', ERR);
 			line = *saved;
 			*saved = NULL;
 			return (line);

@@ -31,9 +31,11 @@ static int
 static int
 	commit(char **line, size_t *consumed, t_arrlst *chrlst, size_t sub)
 {
+	char	n;
+
 	if (**line == '\\')
 	{
-		if (ft_isquote(*(*line + 1)))
+		if (ft_isquote(n = *(*line + 1)) || n == '\\' || n == '$' || n == '~')
 		{
 			arg_builder_add_char(chrlst, *(*line + 1), 0);
 			return (eval_consume(2, line, consumed, 1));

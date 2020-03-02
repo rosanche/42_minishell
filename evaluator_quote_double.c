@@ -15,9 +15,11 @@
 static void
 	commit_escape(char **line, size_t *consumed, t_arrlst *chrlst)
 {
-	if (*(*line + 1) == Q_DOUBLE)
+	char	n;
+
+	if ((n = *(*line + 1) == Q_DOUBLE) || n == '\\' || n == '$')
 	{
-		arg_builder_add_char(chrlst, Q_DOUBLE, Q_DOUBLE);
+		arg_builder_add_char(chrlst, *(*line + 1), Q_DOUBLE);
 		eval_consume(1, line, consumed, 0);
 	}
 	else

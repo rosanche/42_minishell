@@ -271,4 +271,7 @@ char			*home_get_cache(void);
 
 char			*g_saved;
 
+void			process_print_struct(t_process *process);
+void			process_print_struct_arrlst(t_arrlst *processlst);
+
 #endif
